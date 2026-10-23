@@ -1,0 +1,312 @@
+{
+ "min1LabExcellent": {
+  "title": "Kiválóan megfelelt legalább 1 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább egy laborból.",
+  "group": "Összesen"
+ },
+ "min2LabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 2 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább két laborból.",
+  "group": "Összesen"
+ },
+ "min3LabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 3 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább három laborból.",
+  "group": "Összesen"
+ },
+ "min4LabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 4 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább négy laborból.",
+  "group": "Összesen"
+ },
+ "min5LabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 5 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább öt laborból.",
+  "group": "Összesen"
+ },
+ "min6LabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 6 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább hat laborból.",
+  "group": "Összesen"
+ },
+ "min7LabsExcellent": {
+  "title": "Kiválóan megfelelt mind a 7 laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést minden laborból ebben a félévben.",
+  "group": "Összesen"
+ },
+ "lab1Excellent": {
+  "title": "Kiválóan megfelelt a LAB1-ből",
+  "description": "Szerezz kiválóan megfelelt értékelést az 1. laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "lab2Excellent": {
+  "title": "Kiválóan megfelelt a LAB2-ből",
+  "description": "Szerezz kiválóan megfelelt értékelést a 2. laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "lab3Excellent": {
+  "title": "Kiválóan megfelelt a LAB3-ból",
+  "description": "Szerezz kiválóan megfelelt értékelést a 3. laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "lab4Excellent": {
+  "title": "Kiválóan megfelelt a LAB4-ből",
+  "description": "Szerezz kiválóan megfelelt értékelést a 4. laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "min1DevProcessLabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 1 fejlesztési gyakorlatok laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább egy fejlesztési gyakorlatok laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "min2DevProcessLabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 2 fejlesztési gyakorlatok laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább két fejlesztési gyakorlatok laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "min3DevProcessLabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 3 fejlesztési gyakorlatok laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább három fejlesztési gyakorlatok laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "min4DevProcessLabsExcellent": {
+  "title": "Kiválóan megfelelt az összes fejlesztési gyakorlatok laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést minden fejlesztési gyakorlatok laborból.",
+  "group": "Fejlesztési gyakorlatok laborok"
+ },
+ "lab5Excellent": {
+  "title": "Kiválóan megfelelt a LAB5-ből",
+  "description": "Szerezz kiválóan megfelelt értékelést az 5. laborból.",
+  "group": "UML laborok"
+ },
+ "lab6Excellent": {
+  "title": "Kiválóan megfelelt a LAB6-ból",
+  "description": "Szerezz kiválóan megfelelt értékelést a 6. laborból.",
+  "group": "UML laborok"
+ },
+ "lab7Excellent": {
+  "title": "Kiválóan megfelelt a LAB7-ből",
+  "description": "Szerezz kiválóan megfelelt értékelést a 7. laborból.",
+  "group": "UML laborok"
+ },
+ "min1UmlLabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 1 UML laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább egy UML laborból.",
+  "group": "UML laborok"
+ },
+ "min2UmlLabsExcellent": {
+  "title": "Kiválóan megfelelt legalább 2 UML laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést legalább két UML laborból.",
+  "group": "UML laborok"
+ },
+ "min3UmlLabsExcellent": {
+  "title": "Kiválóan megfelelt az összes UML laborból",
+  "description": "Szerezz kiválóan megfelelt értékelést minden UML laborból.",
+  "group": "UML laborok"
+ },
+ "registerByDate": {
+  "title": "Korai regisztráció",
+  "description": "Regisztrálj a házi feladatra az első 72 órában.",
+  "group": "Regisztráció"
+ },
+ "completeOnboardingBy": {
+  "title": "Onboarding korai teljesítése",
+  "description": "Kérj kiértékelést az első 72 órában, és a kiértékelés legyen sikeres.",
+  "group": "Bevezetés"
+ },
+ "startOnboardingBy": {
+  "title": "Onboarding korai elkezdése",
+  "description": "Kérj úgy kiértékelést az első 72 órában, hogy az tartalmazza már a budapest.xml fájlt (elfogadástól függetlenül).",
+  "group": "Bevezetés"
+ },
+ "codingStartCodingBy": {
+  "title": "Kódolás korai elkezdése",
+  "description": "Kérj kiértékelést az első 72 órában, amely végül legalább a tesztkészlet 25%-át teljesíti.",
+  "group": "Kódolás"
+ },
+ "codingCompleteCodingBy": {
+  "title": "Kódolás teljesítése egy héten belül",
+  "description": "Fejezd be a kódolási feladatot az első héten belül.",
+  "group": "Kódolás"
+ },
+ "codingFunctionalCorrectnessAtLeast": {
+  "title": "Funkcionális helyesség küszöb elérése",
+  "description": "Érj el legalább 95%-os funkcionális helyességi pontszámot.",
+  "group": "Kódolás"
+ },
+ "codingSonarQubeCodingBugFree": {
+  "title": "Hibamentes SonarQube ellenőrzés (kódolás)",
+  "description": "Legyen hibamentes a SonarQube ellenőrzése a kódolás feladat teljesítésének pillanatában (minden metrika, leszámítva a tesztfedettséget).",
+  "group": "Kódolás"
+ },
+ "codingUnitTestCoverageAtLeast": {
+  "title": "Unit teszt lefedettségi küszöb elérése",
+  "description": "Érd el a minimális unit teszt lefedettséget a SonarQube ellenőrzés során a kódolás feladat teljesítésének pillanatában.",
+  "group": "Kódolás"
+ },
+ "codingCompleteRefactorBy": {
+  "title": "Refaktorálás korai teljesítése",
+  "description": "Kérj kiértékelést a refaktorálás feladatra a határidő napján délig, és a kiértékelés legyen sikeres.",
+  "group": "Kódolás"
+ },
+ "codingSonarQubeRefactorBugFree": {
+  "title": "Hibamentes SonarQube ellenőrzés (refaktorálás)",
+  "description": "Legyen hibamentes a SonarQube ellenőrzése a refaktorálás feladat teljesítésének pillanatában (minden metrika, leszámítva a tesztfedettséget).",
+  "group": "Kódolás"
+ },
+ "testingCompleteTestingBy": {
+  "title": "Tesztelés korai teljesítése",
+  "description": "Fejezd be a tesztelési feladatot az első héten belül.",
+  "group": "Tesztelés"
+ },
+ "testingStartTestingBy": {
+  "title": "Tesztelés korai elkezdése",
+  "description": "Kezdd el a tesztelési feladatot az első 72 órában.",
+  "group": "Tesztelés"
+ },
+ "testingCorrectnessAndCompletenessAtLeast": {
+  "title": "Tesztelési helyességi küszöb elérése",
+  "description": "Érj el legalább 75%-os helyességi és teljességi pontszámot a tesztelési feladatban.",
+  "group": "Tesztelés"
+ },
+ "reviewFunctionalCorrectnessAtLeast": {
+  "title": "Funkcionális helyesség küszöb elérése",
+  "description": "Érj el 100%-os funkcionális helyességi pontszámot.",
+  "group": "Review"
+ },
+ "reviewSonarQubeBugFreeAtTheStart": {
+  "title": "Hibamentes SonarQube ellenőrzés (review kezdés)",
+  "description": "Legyen hibamentes a SonarQube ellenőrzése a pár kérés pillanatában.",
+  "group": "Review"
+ },
+ "reviewSonarQubeBugFreeAtTheEnd": {
+  "title": "Hibamentes SonarQube ellenőrzés (review befejezés)",
+  "description": "Legyen hibamentes a SonarQube ellenőrzése a review feladat teljesítésének pillanatában.",
+  "group": "Review"
+ },
+ "reviewFastReviewTurnaround": {
+  "title": "Gyors review átfutás",
+  "description": "A review fázis alatt mindig 24 órán belül teljesítsd a feladatodat.",
+  "group": "Review"
+ },
+ "recapQuiz1": {
+  "title": "Legalább 1 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 1 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz2": {
+  "title": "Legalább 2 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 2 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz3": {
+  "title": "Legalább 3 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 3 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz4": {
+  "title": "Legalább 4 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 4 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz5": {
+  "title": "Legalább 5 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 5 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz6": {
+  "title": "Legalább 6 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 6 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz7": {
+  "title": "Legalább 7 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 7 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz8": {
+  "title": "Legalább 8 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 8 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz9": {
+  "title": "Legalább 9 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 9 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz10": {
+  "title": "Legalább 10 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 10 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz11": {
+  "title": "Legalább 11 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 11 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz12": {
+  "title": "Legalább 12 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 12 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz13": {
+  "title": "Legalább 13 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 13 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz14": {
+  "title": "Legalább 14 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 14 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz15": {
+  "title": "Legalább 15 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 15 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz16": {
+  "title": "Legalább 16 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 16 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz17": {
+  "title": "Legalább 17 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 17 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz18": {
+  "title": "Legalább 18 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 18 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz19": {
+  "title": "Legalább 19 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 19 ellenőrző kvízt a határidőig."
+ },
+ "recapQuiz20": {
+  "title": "Legalább 20 ellenőrző kvíz teljesítése",
+  "description": "Teljesíts legalább 20 ellenőrző kvízt a határidőig."
+ },
+ "teachingCase": {
+  "title": "Teaching Case",
+  "description": "Teljesítsd a Teaching Case feladatot."
+ },
+ "lemonTree": {
+  "title": "Lemon Tree",
+  "description": "Teljesítsd a LemonTree szorgalmi labor gyakorlatot az UML modellek verziókezeléséről."
+ },
+ "testingWithLLM": {
+  "title": "Tesztelés LLM-ekkel",
+  "description": "Fedezd fel az LLM-alapú teszt-generálást fakultatív feladatként."
+ },
+ "attendGuestLecture": {
+  "title": "Részvétel Orosz Gergely vendégelőadásán",
+  "description": "Vegyél részt a vendégelőadáson."
+ },
+ "lectureQuiz3": {
+  "title": "Legalább 3 előadás kvíz kitöltése",
+  "description": "Vegyél részt az előadáson és tölts ki legalább 3 előadás kvízt."
+ },
+ "lectureQuiz6": {
+  "title": "Legalább 6 előadás kvíz kitöltése",
+  "description": "Vegyél részt az előadáson és tölts ki legalább 6 előadás kvízt."
+ },
+ "lectureQuiz9": {
+  "title": "Legalább 9 előadás kvíz kitöltése",
+  "description": "Vegyél részt az előadáson és tölts ki legalább 9 előadás kvízt."
+ },
+ "lectureQuiz12": {
+  "title": "Legalább 12 előadás kvíz kitöltése",
+  "description": "Vegyél részt az előadáson és tölts ki legalább 12 előadás kvízt."
+ },
+ "lectureQuiz15": {
+  "title": "Legalább 15 előadás kvíz kitöltése",
+  "description": "Vegyél részt az előadáson és tölts ki legalább 15 előadás kvízt."
+ },
+ "lectureQuiz18": {
+  "title": "Legalább 18 előadás kvíz kitöltése",
+  "description": "Vegyél részt az előadáson és tölts ki legalább 18 előadás kvízt."
+ }
+}

@@ -1,0 +1,342 @@
+{
+  "min1LabExcellent": {
+    "title": "Excellent grade in at least 1 lab",
+    "description": "Receive an excellent grade in at least one lab.",
+    "group": "Overall"
+  },
+  "min2LabsExcellent": {
+    "title": "Excellent grade in at least 2 labs",
+    "description": "Receive an excellent grade in at least 2 labs.",
+    "group": "Overall"
+  },
+  "min3LabsExcellent": {
+    "title": "Excellent grade in at least 3 labs",
+    "description": "Receive an excellent grade in at least 3 labs.",
+    "group": "Overall"
+  },
+  "min4LabsExcellent": {
+    "title": "Excellent grade in at least 4 labs",
+    "description": "Receive an excellent grade in at least 4 labs.",
+    "group": "Overall"
+  },
+  "min5LabsExcellent": {
+    "title": "Excellent grade in at least 5 labs",
+    "description": "Receive an excellent grade in at least 5 labs.",
+    "group": "Overall"
+  },
+  "min6LabsExcellent": {
+    "title": "Excellent grade in at least 6 labs",
+    "description": "Receive an excellent grade in at least 6 labs.",
+    "group": "Overall"
+  },
+  "min7LabsExcellent": {
+    "title": "Excellent grade in all 7 labs",
+    "description": "Receive an excellent grade in all 7 labs this semester.",
+    "group": "Overall"
+  },
+  "lab1Excellent": {
+    "title": "Excellent grade in LAB1",
+    "description": "Receive an excellent grade in lab 1.",
+    "group": "Development Process Labs"
+  },
+  "lab2Excellent": {
+    "title": "Excellent grade in LAB2",
+    "description": "Receive an excellent grade in lab 2.",
+    "group": "Development Process Labs"
+  },
+  "lab3Excellent": {
+    "title": "Excellent grade in LAB3",
+    "description": "Receive an excellent grade in lab 3.",
+    "group": "Development Process Labs"
+  },
+  "lab4Excellent": {
+    "title": "Excellent grade in LAB4",
+    "description": "Receive an excellent grade in lab 4.",
+    "group": "Development Process Labs"
+  },
+  "min1DevProcessLabsExcellent": {
+    "title": "Excellent grade in at least 1 dev process labs",
+    "description": "Receive an excellent grade in at least 1 development process labs.",
+    "group": "Development Process Labs"
+  },
+  "min2DevProcessLabsExcellent": {
+    "title": "Excellent grade in at least 2 dev process labs",
+    "description": "Receive an excellent grade in at least 2 development process labs.",
+    "group": "Development Process Labs"
+  },
+  "min3DevProcessLabsExcellent": {
+    "title": "Excellent grade in at least 3 dev process labs",
+    "description": "Receive an excellent grade in at least 3 development process labs.",
+    "group": "Development Process Labs"
+  },
+  "min4DevProcessLabsExcellent": {
+    "title": "Excellent grade in all dev process labs",
+    "description": "Receive an excellent grade in all 4 development process labs.",
+    "group": "Development Process Labs"
+  },
+  "lab5Excellent": {
+    "title": "Excellent grade in LAB5",
+    "description": "Receive an excellent grade in lab 5.",
+    "group": "UML Labs"
+  },
+  "lab6Excellent": {
+    "title": "Excellent grade in LAB6",
+    "description": "Receive an excellent grade in lab 6.",
+    "group": "UML Labs"
+  },
+  "lab7Excellent": {
+    "title": "Excellent grade in LAB7",
+    "description": "Receive an excellent grade in lab 7.",
+    "group": "UML Labs"
+  },
+  "min1UmlLabsExcellent": {
+    "title": "Excellent grade in at least 1 UML labs",
+    "description": "Receive an excellent grade in at least 1 UML labs.",
+    "group": "UML Labs"
+  },
+  "min2UmlLabsExcellent": {
+    "title": "Excellent grade in at least 2 UML labs",
+    "description": "Receive an excellent grade in at least 2 UML labs.",
+    "group": "UML Labs"
+  },
+  "min3UmlLabsExcellent": {
+    "title": "Excellent grade in all UML labs",
+    "description": "Receive an excellent grade in all 3 UML labs.",
+    "group": "UML Labs"
+  },
+  "registerByDate": {
+    "title": "Early registration",
+    "description": "Complete homework registration before the early deadline.",
+    "group": "Registration"
+  },
+  "completeOnboardingBy": {
+    "title": "Early onboarding completion",
+    "description": "Finish onboarding before the early deadline.",
+    "group": "Bevezetés"
+  },
+  "startOnboardingBy": {
+    "title": "Early onboarding start",
+    "description": "Start onboarding and upload initial configuration early.",
+    "group": "Bevezetés"
+  },
+  "codingStartCodingBy": {
+    "title": "Early coding start",
+    "description": "Start coding and request evaluation before the early deadline.",
+    "group": "Coding"
+  },
+  "codingCompleteCodingBy": {
+    "title": "Complete coding within a week",
+    "description": "Finish the coding phase within one week.",
+    "group": "Coding"
+  },
+  "codingFunctionalCorrectnessAtLeast": {
+    "title": "Functional correctness threshold",
+    "description": "Reach functional correctness threshold in the coding phase.",
+    "group": "Coding"
+  },
+  "codingSonarQubeCodingBugFree": {
+    "title": "Bug-free SonarQube check (coding)",
+    "description": "Pass SonarQube quality checks without bugs in the coding phase.",
+    "group": "Coding"
+  },
+  "codingUnitTestCoverageAtLeast": {
+    "title": "Unit test coverage threshold",
+    "description": "Reach required unit test coverage threshold in the coding phase.",
+    "group": "Coding"
+  },
+  "codingCompleteRefactorBy": {
+    "title": "Early refactoring completion",
+    "description": "Finish code refactoring before the deadline.",
+    "group": "Coding"
+  },
+  "codingSonarQubeRefactorBugFree": {
+    "title": "Bug-free SonarQube check (refactoring)",
+    "description": "Pass SonarQube quality checks without bugs after refactoring.",
+    "group": "Coding"
+  },
+  "testingCompleteTestingBy": {
+    "title": "Early testing completion",
+    "description": "Complete the testing phase before the early deadline.",
+    "group": "Testing"
+  },
+  "testingStartTestingBy": {
+    "title": "Early testing start",
+    "description": "Begin the testing phase before the early deadline.",
+    "group": "Testing"
+  },
+  "testingCorrectnessAndCompletenessAtLeast": {
+    "title": "Test correctness & completeness",
+    "description": "Reach test correctness and completeness threshold.",
+    "group": "Testing"
+  },
+  "reviewFunctionalCorrectnessAtLeast": {
+    "title": "Functional correctness (review)",
+    "description": "Maintain functional correctness during code review.",
+    "group": "Review"
+  },
+  "reviewSonarQubeBugFreeAtTheStart": {
+    "title": "Bug-free code at review start",
+    "description": "Code submitted for review passes SonarQube checks.",
+    "group": "Review"
+  },
+  "reviewSonarQubeBugFreeAtTheEnd": {
+    "title": "Bug-free code at review end",
+    "description": "Final code after review passes SonarQube checks.",
+    "group": "Review"
+  },
+  "reviewFastReviewTurnaround": {
+    "title": "Fast review turnaround",
+    "description": "Complete peer code reviews quickly within required timeframe.",
+    "group": "Review"
+  },
+  "recapQuiz1": {
+    "title": "Complete at least 1 recap quizzes",
+    "description": "Complete at least 1 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz2": {
+    "title": "Complete at least 2 recap quizzes",
+    "description": "Complete at least 2 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz3": {
+    "title": "Complete at least 3 recap quizzes",
+    "description": "Complete at least 3 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz4": {
+    "title": "Complete at least 4 recap quizzes",
+    "description": "Complete at least 4 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz5": {
+    "title": "Complete at least 5 recap quizzes",
+    "description": "Complete at least 5 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz6": {
+    "title": "Complete at least 6 recap quizzes",
+    "description": "Complete at least 6 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz7": {
+    "title": "Complete at least 7 recap quizzes",
+    "description": "Complete at least 7 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz8": {
+    "title": "Complete at least 8 recap quizzes",
+    "description": "Complete at least 8 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz9": {
+    "title": "Complete at least 9 recap quizzes",
+    "description": "Complete at least 9 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz10": {
+    "title": "Complete at least 10 recap quizzes",
+    "description": "Complete at least 10 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz11": {
+    "title": "Complete at least 11 recap quizzes",
+    "description": "Complete at least 11 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz12": {
+    "title": "Complete at least 12 recap quizzes",
+    "description": "Complete at least 12 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz13": {
+    "title": "Complete at least 13 recap quizzes",
+    "description": "Complete at least 13 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz14": {
+    "title": "Complete at least 14 recap quizzes",
+    "description": "Complete at least 14 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz15": {
+    "title": "Complete at least 15 recap quizzes",
+    "description": "Complete at least 15 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz16": {
+    "title": "Complete at least 16 recap quizzes",
+    "description": "Complete at least 16 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz17": {
+    "title": "Complete at least 17 recap quizzes",
+    "description": "Complete at least 17 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz18": {
+    "title": "Complete at least 18 recap quizzes",
+    "description": "Complete at least 18 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz19": {
+    "title": "Complete at least 19 recap quizzes",
+    "description": "Complete at least 19 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "recapQuiz20": {
+    "title": "Complete at least 20 recap quizzes",
+    "description": "Complete at least 20 recap quizzes before their deadlines.",
+    "group": ""
+  },
+  "teachingCase": {
+    "title": "Teaching Case",
+    "description": "Complete Teaching Case extra assignment.",
+    "group": ""
+  },
+  "lemonTree": {
+    "title": "Lemon Tree",
+    "description": "Complete Lemon Tree extra assignment.",
+    "group": ""
+  },
+  "testingWithLLM": {
+    "title": "Testing with LLMs",
+    "description": "Complete Testing with LLMs extra assignment.",
+    "group": ""
+  },
+  "attendGuestLecture": {
+    "title": "Guest lecture attendance",
+    "description": "Attend guest lecture by Gergely Orosz.",
+    "group": ""
+  },
+  "lectureQuiz3": {
+    "title": "Attend at least 3 lectures",
+    "description": "Complete quizzes for at least 3 lectures.",
+    "group": ""
+  },
+  "lectureQuiz6": {
+    "title": "Attend at least 6 lectures",
+    "description": "Complete quizzes for at least 6 lectures.",
+    "group": ""
+  },
+  "lectureQuiz9": {
+    "title": "Attend at least 9 lectures",
+    "description": "Complete quizzes for at least 9 lectures.",
+    "group": ""
+  },
+  "lectureQuiz12": {
+    "title": "Attend at least 12 lectures",
+    "description": "Complete quizzes for at least 12 lectures.",
+    "group": ""
+  },
+  "lectureQuiz15": {
+    "title": "Attend at least 15 lectures",
+    "description": "Complete quizzes for at least 15 lectures.",
+    "group": ""
+  },
+  "lectureQuiz18": {
+    "title": "Attend at least 18 lectures",
+    "description": "Complete quizzes for at least 18 lectures.",
+    "group": ""
+  }
+}

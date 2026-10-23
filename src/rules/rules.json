@@ -1,0 +1,1059 @@
+{
+ "courseId": 16995,
+ "levels": [
+  {
+   "xpToLevelUp": 16,
+   "rewards": []
+  },
+  {
+   "xpToLevelUp": 16,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 16,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 20,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 20,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 20,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 26,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 26,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 32,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 32,
+   "rewards": [
+    {
+     "type": "imsc_point",
+     "amount": 1
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 34,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 34,
+   "rewards": [
+    {
+     "type": "imsc_point",
+     "amount": 1
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 36,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 36,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 2
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 36,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 2
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 50,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 2
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 50,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 4
+    },
+    {
+     "type": "imsc_point",
+     "amount": 2
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 50,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 4
+    },
+    {
+     "type": "imsc_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 50,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 50,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 4
+    },
+    {
+     "type": "imsc_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 50,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 3
+    }
+   ]
+  },
+  {
+   "xpToLevelUp": 0,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 3
+    },
+    {
+     "type": "proposed_grade",
+     "grade": 5
+    }
+   ]
+  }
+ ],
+ "gradeInfo": {
+  "pointsCollectableOnTheExam": 70,
+  "examPassThreshold": 35,
+  "gradeThresholds": [
+   0,
+   35,
+   63,
+   76,
+   90
+  ]
+ },
+ "labs": {
+  "count": 7,
+  "retakeTokens": 2,
+  "entryPassGrade": 2,
+  "exitPassGrade": 1,
+  "titles": {
+   "1": "Komplex projektek kezelésének kihívásai",
+   "2": "Forráskódkezelés",
+   "3": "CI és Statikus technikák",
+   "4": "Teszttervezés",
+   "5": "Strukturális modellezés (UML)",
+   "6": "Viselkedési modellezés I. (UML)",
+   "7": "Viselkedési modellezés II. (UML)"
+  },
+  "defaultDates": {
+   "1": "2026-09-16T14:00:00",
+   "2": "2026-09-30T14:00:00",
+   "3": "2026-10-14T14:00:00",
+   "4": "2026-10-28T14:00:00",
+   "5": "2026-11-11T14:00:00",
+   "6": "2026-11-25T14:00:00",
+   "7": "2026-12-09T14:00:00"
+  }
+ },
+ "homeAssignment": {
+  "windowStartDate": "2026-09-29T00:00:00",
+  "windowEndDate": "2026-12-17T23:59:59",
+  "phases": {
+   "registration": {
+    "key": "registration",
+    "name": "Fázis 0: Regisztráció",
+    "availableFrom": "2026-10-06T12:00:00",
+    "dueDate": "2026-10-13T12:00:00",
+    "lateSubmissionDate": "2026-10-20T12:00:00"
+   },
+   "onboarding": {
+    "key": "onboarding",
+    "name": "Fázis 1: Betanítás (Onboarding)",
+    "availableFrom": "2026-10-13T12:00:00",
+    "dueDate": "2026-10-20T12:00:00",
+    "lateSubmissionDate": "2026-10-27T12:00:00"
+   },
+   "coding": {
+    "key": "coding",
+    "name": "Fázis 2: Kódolás",
+    "availableFrom": "2026-10-20T12:00:00",
+    "dueDate": "2026-11-03T12:00:00",
+    "lateSubmissionDate": "2026-11-10T12:00:00"
+   },
+   "testing": {
+    "key": "testing",
+    "name": "Fázis 3: Tesztelés",
+    "availableFrom": "2026-11-03T12:00:00",
+    "dueDate": "2026-11-17T12:00:00",
+    "lateSubmissionDate": "2026-11-24T12:00:00"
+   },
+   "review": {
+    "key": "review",
+    "name": "Fázis 4: Review",
+    "availableFrom": "2026-11-24T12:00:00",
+    "dueDate": "2026-12-01T12:00:00",
+    "lateSubmissionDate": "2026-12-08T12:00:00"
+   }
+  }
+ },
+ "tasks": [
+  {
+   "key": "min1LabExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 4,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min2LabsExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 8,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min3LabsExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 12,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min4LabsExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 16,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min5LabsExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 20,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min6LabsExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 24,
+   "type": "optional",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min7LabsExcellent",
+   "group": "labs",
+   "sub": "overall",
+   "xp": 28,
+   "type": "optional",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "lab1Excellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-09-16",
+   "source": "labs"
+  },
+  {
+   "key": "lab2Excellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-09-30",
+   "source": "labs"
+  },
+  {
+   "key": "lab3Excellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-10-14",
+   "source": "labs"
+  },
+  {
+   "key": "lab4Excellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-28",
+   "source": "labs"
+  },
+  {
+   "key": "min1DevProcessLabsExcellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 4,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-10-28"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min2DevProcessLabsExcellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 8,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-10-28"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min3DevProcessLabsExcellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 12,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-10-28"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min4DevProcessLabsExcellent",
+   "group": "labs",
+   "sub": "devProcessLabs",
+   "xp": 16,
+   "type": "optional",
+   "examOnly": false,
+   "due": [
+    "2026-09-16",
+    "2026-10-28"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "lab5Excellent",
+   "group": "labs",
+   "sub": "umlLabs",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-11",
+   "source": "labs"
+  },
+  {
+   "key": "lab6Excellent",
+   "group": "labs",
+   "sub": "umlLabs",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-25",
+   "source": "labs"
+  },
+  {
+   "key": "lab7Excellent",
+   "group": "labs",
+   "sub": "umlLabs",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-12-09",
+   "source": "labs"
+  },
+  {
+   "key": "min1UmlLabsExcellent",
+   "group": "labs",
+   "sub": "umlLabs",
+   "xp": 12,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-11-11",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min2UmlLabsExcellent",
+   "group": "labs",
+   "sub": "umlLabs",
+   "xp": 16,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": [
+    "2026-11-11",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "min3UmlLabsExcellent",
+   "group": "labs",
+   "sub": "umlLabs",
+   "xp": 20,
+   "type": "optional",
+   "examOnly": false,
+   "due": [
+    "2026-11-11",
+    "2026-12-09"
+   ],
+   "source": "labs"
+  },
+  {
+   "key": "registerByDate",
+   "group": "homeAssignment",
+   "sub": "registration",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-09",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "startOnboardingBy",
+   "group": "homeAssignment",
+   "sub": "onboarding",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-16",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "completeOnboardingBy",
+   "group": "homeAssignment",
+   "sub": "onboarding",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-16",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingStartCodingBy",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 20,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-23",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingCompleteCodingBy",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 20,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-27",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingFunctionalCorrectnessAtLeast",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-03",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingSonarQubeCodingBugFree",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 20,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-03",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingUnitTestCoverageAtLeast",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 20,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-03",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingCompleteRefactorBy",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-10-30",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "codingSonarQubeRefactorBugFree",
+   "group": "homeAssignment",
+   "sub": "coding",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-03",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "testingStartTestingBy",
+   "group": "homeAssignment",
+   "sub": "testing",
+   "xp": 20,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-11-06",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "testingCompleteTestingBy",
+   "group": "homeAssignment",
+   "sub": "testing",
+   "xp": 20,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-11-10",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "testingCorrectnessAndCompletenessAtLeast",
+   "group": "homeAssignment",
+   "sub": "testing",
+   "xp": 20,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-11-17",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "reviewFunctionalCorrectnessAtLeast",
+   "group": "homeAssignment",
+   "sub": "review",
+   "xp": 10,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-12-01",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "reviewSonarQubeBugFreeAtTheStart",
+   "group": "homeAssignment",
+   "sub": "review",
+   "xp": 20,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-12-01",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "reviewSonarQubeBugFreeAtTheEnd",
+   "group": "homeAssignment",
+   "sub": "review",
+   "xp": 20,
+   "type": "mandatory",
+   "examOnly": false,
+   "due": "2026-12-01",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "reviewFastReviewTurnaround",
+   "group": "homeAssignment",
+   "sub": "review",
+   "xp": 20,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-12-01",
+   "source": "untracked:homework"
+  },
+  {
+   "key": "recapQuiz1",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-09-13",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz2",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-09-20",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz3",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-09-20",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz4",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-09-27",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz5",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-10-04",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz6",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-10-04",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz7",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-10-11",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz8",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-10-18",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz9",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-10-18",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz10",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-10-25",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz11",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-01",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz12",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-01",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz13",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-08",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz14",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-15",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz15",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-15",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz16",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-22",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz17",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-29",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz18",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-11-29",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz19",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-12-06",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "recapQuiz20",
+   "group": "recapQuizzes",
+   "sub": "",
+   "xp": 2,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-12-13",
+   "source": "recapQuiz"
+  },
+  {
+   "key": "teachingCase",
+   "group": "extraAssignments",
+   "sub": "",
+   "xp": 150,
+   "type": "optional",
+   "examOnly": false,
+   "due": [
+    "2026-10-30",
+    "2026-12-09"
+   ],
+   "source": "untracked:extra"
+  },
+  {
+   "key": "lemonTree",
+   "group": "extraAssignments",
+   "sub": "",
+   "xp": 50,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-12-01",
+   "source": "untracked:extra"
+  },
+  {
+   "key": "testingWithLLM",
+   "group": "extraAssignments",
+   "sub": "",
+   "xp": 50,
+   "type": "optional",
+   "examOnly": false,
+   "due": "2026-12-01",
+   "source": "untracked:extra"
+  },
+  {
+   "key": "attendGuestLecture",
+   "group": "misc",
+   "sub": "",
+   "xp": 10,
+   "type": "optional",
+   "examOnly": true,
+   "due": "2026-09-28",
+   "source": "untracked:manual"
+  },
+  {
+   "key": "lectureQuiz3",
+   "group": "misc",
+   "sub": "",
+   "xp": 3,
+   "type": "optional",
+   "examOnly": true,
+   "due": [
+    "2026-09-01",
+    "2026-12-09"
+   ],
+   "source": "lectureQuiz"
+  },
+  {
+   "key": "lectureQuiz6",
+   "group": "misc",
+   "sub": "",
+   "xp": 6,
+   "type": "optional",
+   "examOnly": true,
+   "due": [
+    "2026-09-01",
+    "2026-12-09"
+   ],
+   "source": "lectureQuiz"
+  },
+  {
+   "key": "lectureQuiz9",
+   "group": "misc",
+   "sub": "",
+   "xp": 6,
+   "type": "optional",
+   "examOnly": true,
+   "due": [
+    "2026-09-01",
+    "2026-12-09"
+   ],
+   "source": "lectureQuiz"
+  },
+  {
+   "key": "lectureQuiz12",
+   "group": "misc",
+   "sub": "",
+   "xp": 9,
+   "type": "optional",
+   "examOnly": true,
+   "due": [
+    "2026-09-01",
+    "2026-12-09"
+   ],
+   "source": "lectureQuiz"
+  },
+  {
+   "key": "lectureQuiz15",
+   "group": "misc",
+   "sub": "",
+   "xp": 9,
+   "type": "optional",
+   "examOnly": true,
+   "due": [
+    "2026-09-01",
+    "2026-12-09"
+   ],
+   "source": "lectureQuiz"
+  },
+  {
+   "key": "lectureQuiz18",
+   "group": "misc",
+   "sub": "",
+   "xp": 12,
+   "type": "optional",
+   "examOnly": true,
+   "due": [
+    "2026-09-01",
+    "2026-12-09"
+   ],
+   "source": "lectureQuiz"
+  }
+ ]
+}
