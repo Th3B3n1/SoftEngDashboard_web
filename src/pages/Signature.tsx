@@ -179,11 +179,11 @@ export function SignaturePage() {
           <p style={{ fontSize: '13px', fontWeight: 600, color: 'rgb(233, 236, 239)', marginBottom: '10px' }}>
             {t('upcomingTwoWeeks')}
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '10px 24px' }}>
+          <div className="upcoming-two-weeks-grid">
             {nextUpcomingLab && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px 9px' }}>
                 <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'rgb(247, 103, 7)', flexShrink: 0 }} />
-                <span style={{ fontSize: '13.5px', color: 'rgb(233, 236, 239)', flex: 1 }}>
+                <span style={{ fontSize: '13.5px', color: 'rgb(233, 236, 239)', flex: '1 1 160px' }}>
                   LAB{nextUpcomingLab.n}: {nextUpcomingLab.title || (rules.labs as any).titles?.[String(nextUpcomingLab.n)] || `Labor ${nextUpcomingLab.n}`}
                 </span>
                 <span style={{ fontSize: '12px', color: 'rgb(166, 167, 171)' }}>
@@ -193,9 +193,9 @@ export function SignaturePage() {
             )}
 
             {nextUpcomingHw && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px 9px' }}>
                 <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'rgb(28, 126, 214)', flexShrink: 0 }} />
-                <span style={{ fontSize: '13.5px', color: 'rgb(233, 236, 239)', flex: 1 }}>
+                <span style={{ fontSize: '13.5px', color: 'rgb(233, 236, 239)', flex: '1 1 160px' }}>
                   {nextUpcomingHw.name}
                 </span>
                 <span style={{ fontSize: '12px', color: 'rgb(166, 167, 171)' }}>
@@ -316,8 +316,8 @@ export function SignaturePage() {
                   }}
                 >
                   {/* Top lab row */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                    <p style={{ fontSize: '13.5px', fontWeight: 700, color: 'rgb(241, 243, 245)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '8px' }}>
+                    <p className="lab-item-title">
                       LAB{l.n}: {title}
                     </p>
                     <div

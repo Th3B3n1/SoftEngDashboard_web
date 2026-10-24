@@ -170,14 +170,7 @@ export function TasksPage() {
           />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
             <span
-              style={{
-                fontSize: '13.5px',
-                fontWeight: 600,
-                color: 'rgb(241, 243, 245)',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
+              className="task-row-title-text"
               title={info.title}
             >
               {info.title}
@@ -374,6 +367,7 @@ export function TasksPage() {
 
         {/* Level Progression Row */}
         <div
+          className="tasks-level-progression"
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -399,7 +393,7 @@ export function TasksPage() {
           </div>
 
           {/* Progress bar connecting */}
-          <div style={{ flex: 1, minWidth: '140px', paddingTop: '24px' }}>
+          <div className="tasks-level-bar-col" style={{ flex: 1, minWidth: '140px', paddingTop: '24px' }}>
             <div
               style={{
                 height: '8px',

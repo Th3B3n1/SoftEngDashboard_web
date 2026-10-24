@@ -25,7 +25,7 @@ export const translations = {
     tabDirect: 'EduID Bejelentkezés',
     tabManual: 'Kézi token / SSO',
     vpnWarningTitle: 'Fontos tudnivaló a házi feladat szinkronizációhoz:',
-    vpnWarningBody: 'A Házi Feladat Portál elérése az egyetemi hálózatra van korlátozva. A házi feladat pontok automatikus szinkronizálásához bejelentkezés előtt mindenképpen csatlakozz a BME VPN-re vagy az egyetemi Eduroam hálózatra!',
+    vpnWarningBody: 'Mivel a Házi Feladat Portál elérése az egyetemi hálózatra van korlátozva, ezért az azokhoz tartozó XP-k nem tundnak itt szinkronizálódni. Ezt egyelőre nem tudjuk megoldani, így ez a frontend csak a Moodle adatok alapján számol.',
     usernameLabel: 'eduID',
     passwordLabel: 'Jelszó',
     loginBtn: 'Bejelentkezés',
@@ -178,9 +178,6 @@ export const translations = {
     cancel: 'Mégse',
     saveAndSync: 'Mentés és Szinkronizálás',
     syncing: 'Szinkronizálás folyamatban…',
-
-    // Beta Notice
-    betaNotice: 'Ez a dashboard béta állapotban van, és erősen kísérletinek tekintendő. Számíts rá, hogy hibákat és/vagy pontatlanságokat tartalmaz, amelyeket a félév során javítani kell. Minden hallgató felelőssége, hogy nyomon kövesse a saját haladását, és jelezze, ha eltérést tapasztal a dashboardban látottakhoz képest. A talált hibák javítása miatt az összesített XP és a megszerzett pontjaid vagy az általános haladásod változhat (akár csökkenhet is), amiért felelősséget nem vállalunk.',
   },
 
   en: {
@@ -360,9 +357,6 @@ export const translations = {
     cancel: 'Cancel',
     saveAndSync: 'Save and Sync',
     syncing: 'Syncing…',
-
-    // Beta Notice
-    betaNotice: 'This dashboard is currently in beta and considered experimental. Please expect bugs or inaccuracies that will be addressed during the semester. Students are responsible for tracking their own progress and reporting discrepancies. Total XP, earned points, and overall standing may fluctuate as fixes are deployed.',
   },
 };
 

@@ -4,7 +4,6 @@ import { useDashboard } from '../contexts/DashboardContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { rules } from '../engine/engine';
 import { forecast, proposedGrade, cumXp } from '../engine/levels';
-import { BetaNotice } from '../components/BetaNotice';
 
 export function GradePage() {
   const { model: m } = useDashboard();
@@ -193,7 +192,7 @@ export function GradePage() {
         {/* RIGHT COLUMN: Level Comparison & Forecast Table */}
         <div className="dashboard-card" style={{ padding: '24px' }}>
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '6px' }}>
             <h2 style={{ fontSize: '17.5px', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
               {t('compareWithLevel')}
             </h2>
@@ -244,51 +243,52 @@ export function GradePage() {
 
           {/* Comparison Table */}
           <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '16px' }}>
-            {/* Table Header */}
-            <div className="grade-table-header" style={{ marginBottom: '12px' }}>
-              <span className="grade-header-col-title" style={{ flex: 1.4 }}>
-                {t('colFinalGrade')}
-              </span>
-              <div className="grade-header-col">
-                <div className="mini-level-bubble current">{levelNum}</div>
-                <span className="grade-col-subtext">{t('colCurrent')}</span>
-              </div>
-              <div className="grade-header-col">
-                <div className="mini-level-bubble next">{selectedLevel}</div>
-                <span className="grade-col-subtext highlight">{t('colSelected')}</span>
-              </div>
-              <div className="grade-header-col">
-                <div className="mini-level-bubble max">{maxLevel}</div>
-                <span className="grade-col-subtext" style={{ color: 'rgb(174, 62, 201)' }}>{t('colMax')}</span>
-              </div>
-            </div>
-
-            {/* Table Rows */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {gradeDefs.map((r) => (
-                <div key={r.index} className="grade-row">
-                  <div className="grade-row-name-col" style={{ flex: 1.4 }}>
-                    <span className="grade-dot" style={{ background: r.dotColor }} />
-                    <span className="grade-name-text">{r.name}</span>
+            <div className="table-scroll-wrapper">
+              <div className="grade-table-4col">
+                {/* Table Header */}
+                <div className="grade-table-header" style={{ marginBottom: '12px' }}>
+                  <span className="grade-header-col-title">
+                    {t('colFinalGrade')}
+                  </span>
+                  <div className="grade-header-col">
+                    <div className="mini-level-bubble current">{levelNum}</div>
+                    <span className="grade-col-subtext">{t('colCurrent')}</span>
                   </div>
-                  <span className="grade-val-col">
-                    {getCellContent(r.index, curForecast, curProposed)}
-                  </span>
-                  <span className="grade-val-col highlight">
-                    {getCellContent(r.index, selForecast, selProposed)}
-                  </span>
-                  <span className="grade-val-col">
-                    {getCellContent(r.index, maxForecast, maxProposed)}
-                  </span>
+                  <div className="grade-header-col">
+                    <div className="mini-level-bubble next">{selectedLevel}</div>
+                    <span className="grade-col-subtext highlight">{t('colSelected')}</span>
+                  </div>
+                  <div className="grade-header-col">
+                    <div className="mini-level-bubble max">{maxLevel}</div>
+                    <span className="grade-col-subtext" style={{ color: 'rgb(174, 62, 201)' }}>{t('colMax')}</span>
+                  </div>
                 </div>
-              ))}
+
+                {/* Table Rows */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {gradeDefs.map((r) => (
+                    <div key={r.index} className="grade-row">
+                      <div className="grade-row-name-col">
+                        <span className="grade-dot" style={{ background: r.dotColor }} />
+                        <span className="grade-name-text">{r.name}</span>
+                      </div>
+                      <span className="grade-val-col">
+                        {getCellContent(r.index, curForecast, curProposed)}
+                      </span>
+                      <span className="grade-val-col highlight">
+                        {getCellContent(r.index, selForecast, selProposed)}
+                      </span>
+                      <span className="grade-val-col">
+                        {getCellContent(r.index, maxForecast, maxProposed)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Beta disclaimer banner */}
-      <BetaNotice />
     </div>
   );
 }

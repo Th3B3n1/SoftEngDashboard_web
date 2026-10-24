@@ -462,31 +462,36 @@ export function OverviewPage() {
             </span>
           </div>
 
-          {/* Grade Table Header */}
-          <div className="grade-table-header">
-            <span className="grade-header-col-title">{t('finalGradeExam')}</span>
-            <div className="grade-header-col">
-              <div className="mini-level-bubble current">{levelNum}</div>
-              <span className="grade-col-subtext">{t('now')}</span>
-            </div>
-            <div className="grade-header-col">
-              <div className="mini-level-bubble next">{nextLevelNum}</div>
-              <span className="grade-col-subtext highlight">{t('levelUp')}</span>
-            </div>
-          </div>
-
-          {/* Grade Rows */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {gradeRows.map((r, idx) => (
-              <div key={idx} className="grade-row">
-                <div className="grade-row-name-col">
-                  <span className="grade-dot" style={{ background: r.dotColor }} />
-                  <span className="grade-name-text">{r.name}</span>
+          {/* Grade Table (3 columns, scrollable on narrow mobile) */}
+          <div className="table-scroll-wrapper">
+            <div className="grade-table-3col">
+              {/* Grade Table Header */}
+              <div className="grade-table-header">
+                <span className="grade-header-col-title">{t('finalGradeExam')}</span>
+                <div className="grade-header-col">
+                  <div className="mini-level-bubble current">{levelNum}</div>
+                  <span className="grade-col-subtext">{t('now')}</span>
                 </div>
-                <span className="grade-val-col">{r.cur}</span>
-                <span className="grade-val-col highlight">{r.next}</span>
+                <div className="grade-header-col">
+                  <div className="mini-level-bubble next">{nextLevelNum}</div>
+                  <span className="grade-col-subtext highlight">{t('levelUp')}</span>
+                </div>
               </div>
-            ))}
+
+              {/* Grade Rows */}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {gradeRows.map((r, idx) => (
+                  <div key={idx} className="grade-row">
+                    <div className="grade-row-name-col">
+                      <span className="grade-dot" style={{ background: r.dotColor }} />
+                      <span className="grade-name-text">{r.name}</span>
+                    </div>
+                    <span className="grade-val-col">{r.cur}</span>
+                    <span className="grade-val-col highlight">{r.next}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

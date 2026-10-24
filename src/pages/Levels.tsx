@@ -216,6 +216,7 @@ export function LevelsPage() {
             return (
               <div
                 key={currentIdx}
+                className="level-ladder-row"
                 style={{
                   background: isCurrent ? 'var(--bg-card-perf)' : 'var(--bg-card)',
                   border: isCurrent
@@ -227,9 +228,10 @@ export function LevelsPage() {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: '12px',
+                  flexWrap: 'wrap',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
                   <div
                     style={{
                       width: '36px',
@@ -244,11 +246,12 @@ export function LevelsPage() {
                       justifyContent: 'center',
                       fontSize: '14px',
                       fontWeight: 800,
+                      flexShrink: 0,
                     }}
                   >
                     {currentIdx}
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0 }}>
                     <span style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-main)' }}>
                       {t('levelNumText', { level: currentIdx })} {isCurrent && <span style={{ color: 'rgb(77, 99, 201)', fontSize: '12px' }}>{t('currentLevelTag')}</span>}
                     </span>
@@ -258,7 +261,7 @@ export function LevelsPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className="level-ladder-badges" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                   {rewards && (
                     <span
                       style={{
