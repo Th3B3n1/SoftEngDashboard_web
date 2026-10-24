@@ -37,6 +37,11 @@ export interface HfStatus {
 
 export function extractLtik(raw: string): string {
   let cleaned = raw.trim();
+  if (cleaned.startsWith('http://') || cleaned.startsWith('https://')) {
+    if (!cleaned.includes('ltik=')) {
+      return ''; // URL without ltik query parameter is invalid
+    }
+  }
   if (cleaned.includes('ltik=')) {
     const after = cleaned.split('ltik=')[1];
     cleaned = after.split('&')[0].split('#')[0];
@@ -91,7 +96,7 @@ export function parseHfJson(raw: string): HfStatus | null {
 }
 
 export async function fetchHfStatus(ltik?: string): Promise<HfStatus | null> {
-  const token = ltik || getHfToken();
+  const token = ltik ? extractLtik(ltik) : getHfToken();
   if (!token) return null;
 
   try {

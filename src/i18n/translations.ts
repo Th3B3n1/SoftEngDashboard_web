@@ -20,8 +20,8 @@ export const translations = {
     upcoming: 'Közelgő',
 
     // Login Page
-    loginTitle: 'Szoftverfejlesztés',
-    loginSubtitle: 'BMEVIEEAB00 • Haladási Dashboard',
+    loginTitle: 'Szoftvertechnológia',
+    loginSubtitle: 'BMEVIMIAB04 • Haladási Dashboard',
     tabDirect: 'EduID Bejelentkezés',
     tabManual: 'Kézi token / SSO',
     vpnWarningTitle: 'Fontos tudnivaló a házi feladat szinkronizációhoz:',
@@ -202,8 +202,8 @@ export const translations = {
     upcoming: 'Upcoming',
 
     // Login Page
-    loginTitle: 'Software Development',
-    loginSubtitle: 'BMEVIEEAB00 • Progress Dashboard',
+    loginTitle: 'Software Engineering',
+    loginSubtitle: 'BMEVIMIAB04 • Progress Dashboard',
     tabDirect: 'EduID Login',
     tabManual: 'Manual Token / SSO',
     vpnWarningTitle: 'Important notice for homework synchronization:',
