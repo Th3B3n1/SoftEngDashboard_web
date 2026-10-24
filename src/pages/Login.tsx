@@ -3,6 +3,7 @@ import { MANAGE_TOKEN_URL, createLaunchUrl, parseRedirect, setToken } from '../m
 import { GraduationCap, ExternalLink, AlertCircle, Loader2, Info } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { HeaderActions } from '../components/HeaderActions';
+import { BACKEND_URL } from '../config';
 
 export function LoginPage() {
   const { t } = useLanguage();
@@ -46,15 +47,37 @@ export function LoginPage() {
     setErrorDirect(null);
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'A bejelentkezés sikertelen volt.');
+        const text = await res.text();
+        let message = `Szerverhiba (${res.status})`;
+        try {
+          const json = JSON.parse(text);
+          if (json.error || json.message) {
+            message = json.error || json.message;
+          }
+        } catch {
+          if (res.status === 503 || res.status === 504) {
+            message = `A backend szerver nem válaszolt időben (HTTP ${res.status}). Próbáld újra pár másodperc múlva.`;
+          } else if (res.status === 404) {
+            message = `A bejelentkezési végpont nem található (HTTP 404). Ellenőrizd a backend URL-t.`;
+          } else {
+            message = `Szerverhiba (${res.status}): ${text.slice(0, 100)}`;
+          }
+        }
+        throw new Error(message);
+      }
+
+      let data: any;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error('A szerver válasza nem érvényes JSON formátumú.');
       }
 
       if (!data.token) {

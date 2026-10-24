@@ -1,3 +1,5 @@
+import { BACKEND_URL } from '../config';
+
 const LTIK_KEY = 'softeng.ltik';
 
 export interface HfTaskInstance {
@@ -100,8 +102,8 @@ export async function fetchHfStatus(ltik?: string): Promise<HfStatus | null> {
   if (!token) return null;
 
   try {
-    // Route through backend proxy which handles Cloudflare & CORS
-    const proxyUrl = `/api/hf/status?ltik=${encodeURIComponent(token)}`;
+    // Route through backend which handles Cloudflare & CORS
+    const proxyUrl = `${BACKEND_URL}/api/hf/status?ltik=${encodeURIComponent(token)}`;
     const res = await fetch(proxyUrl);
     if (!res.ok) {
       console.warn(`HF proxy returned status ${res.status}`);

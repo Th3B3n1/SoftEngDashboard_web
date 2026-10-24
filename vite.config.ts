@@ -1,20 +1,19 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, loadEnv } from 'vite';
 
-const backendTarget = process.env.BACKEND_URL || 'http://localhost:5228';
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const backendUrl = process.env.BACKEND_URL || env.BACKEND_URL || env.VITE_BACKEND_URL || (mode === 'development' ? 'http://localhost:5228' : '');
 
-// base './' keeps the build deployable on any static host / sub-path (HashRouter is used).
-export default defineConfig({
-  base: './',
-  plugins: [react()],
-  server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: backendTarget,
-        changeOrigin: true,
-      },
+  return {
+    base: './',
+    plugins: [react()],
+    define: {
+      'import.meta.env.BACKEND_URL': JSON.stringify(backendUrl),
     },
-  },
-  test: { environment: 'node', include: ['src/**/*.test.ts'] },
+    server: {
+      port: 5173,
+    },
+    test: { environment: 'node', include: ['src/**/*.test.ts'] },
+  };
 });
