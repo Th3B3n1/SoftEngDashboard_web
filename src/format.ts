@@ -2,31 +2,60 @@ import type { GradeKey, LabResult } from './engine/types';
 import taskTextsHu from './rules/taskTexts.hu.json';
 import taskTextsEn from './rules/taskTexts.en.json';
 
+const dateFmtHu = new Intl.DateTimeFormat('hu-HU', { month: 'short', day: 'numeric' });
+const dateFmtEn = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+
+const labDateFmtHu = new Intl.DateTimeFormat('hu-HU', {
+  month: 'short',
+  day: 'numeric',
+  weekday: 'short',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+const labDateFmtEn = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  weekday: 'short',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+const dateTimeFmtHu = new Intl.DateTimeFormat('hu-HU', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+const dateTimeFmtEn = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+const toValidDate = (ms: number | string | Date): Date | null => {
+  const d = ms instanceof Date ? ms : new Date(ms);
+  return Number.isNaN(d.getTime()) ? null : d;
+};
+
 export const fmtDate = (ms: number | string | Date, lang: 'hu' | 'en' = 'hu') => {
-  const d = typeof ms === 'number' ? new Date(ms) : typeof ms === 'string' ? new Date(ms) : ms;
-  return new Intl.DateTimeFormat(lang === 'hu' ? 'hu-HU' : 'en-US', { month: 'short', day: 'numeric' }).format(d);
+  const d = toValidDate(ms);
+  if (!d) return '–';
+  return (lang === 'hu' ? dateFmtHu : dateFmtEn).format(d);
 };
 
 export const fmtLabDate = (ms: number | string | Date, lang: 'hu' | 'en' = 'hu') => {
-  const d = typeof ms === 'number' ? new Date(ms) : typeof ms === 'string' ? new Date(ms) : ms;
-  return new Intl.DateTimeFormat(lang === 'hu' ? 'hu-HU' : 'en-US', {
-    month: 'short',
-    day: 'numeric',
-    weekday: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(d);
+  const d = toValidDate(ms);
+  if (!d) return '–';
+  return (lang === 'hu' ? labDateFmtHu : labDateFmtEn).format(d);
 };
 
 export const fmtDateTime = (ms: number | string | Date, lang: 'hu' | 'en' = 'hu') => {
-  const d = typeof ms === 'number' ? new Date(ms) : typeof ms === 'string' ? new Date(ms) : ms;
-  return new Intl.DateTimeFormat(lang === 'hu' ? 'hu-HU' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(d);
+  const d = toValidDate(ms);
+  if (!d) return '–';
+  return (lang === 'hu' ? dateTimeFmtHu : dateTimeFmtEn).format(d);
 };
 
 export function relDays(target: number | string | Date, now = Date.now(), lang: 'hu' | 'en' = 'hu'): string {

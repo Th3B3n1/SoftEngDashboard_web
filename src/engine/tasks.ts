@@ -26,36 +26,43 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
   const recap = snap.quizzes.filter((q) => /^Ellenőrző kvíz/i.test(q.name)).sort(byOrder);
   const lectureDone = snap.quizzes.filter((q) => /^Előadás kvíz/i.test(q.name) && done(q)).length;
 
-  // Check if Moodle has any data or active presence for Lab N
-  const labHasMoodle = (n: number) => {
+  // Precompute Moodle presence and active status for Labs 1..7 to avoid repeated RegExp allocations and array scans
+  const labCount = labs.labs.length;
+  const labPresence = new Array<boolean>(labCount + 1).fill(false);
+  const labCurrent = new Array<boolean>(labCount + 1).fill(false);
+
+  for (let n = 1; n <= labCount; n++) {
     const lab = labs.labs[n - 1];
-    if (!lab) return false;
-    // Attended or graded means lab has definite presence
-    if (lab.original.status === 'attended' || (lab.finalGrade !== null && lab.finalGrade !== 'fail')) return true;
-    const hasQuiz = snap.quizzes.some((q) => new RegExp(`^LAB${n}:\\s*(beugró|kiugró)`, 'i').test(q.name));
-    const hasAssign = snap.assignments.some((a) => new RegExp(`^LAB${n}:\\s*jegyzőkönyv`, 'i').test(a.name));
-    const hasGroup = snap.groups.some((g) => new RegExp(`^lab${n}_`, 'i').test(g));
-    return hasQuiz || hasAssign || hasGroup;
-  };
+    if (!lab) continue;
 
-  // Check if Lab N is currently active (open/approaching within 14 days and has Moodle presence)
-  const isLabCurrent = (n: number) => {
-    const lab = labs.labs[n - 1];
-    if (!lab) return false;
-    if (lab.finalGrade === 'excellent') return false; // already done with excellent
-    if (lab.result === 'at_risk') return true; // retake is active
+    const quizRegex = new RegExp(`^LAB${n}:\\s*(beugró|kiugró)`, 'i');
+    const assignRegex = new RegExp(`^LAB${n}:\\s*jegyzőkönyv`, 'i');
+    const groupRegex = new RegExp(`^lab${n}_`, 'i');
 
-    // If Moodle doesn't even have this lab yet, it cannot be current
-    if (!labHasMoodle(n)) return false;
+    const hasPresence =
+      lab.original.status === 'attended' ||
+      (lab.finalGrade !== null && lab.finalGrade !== 'fail') ||
+      snap.quizzes.some((q) => quizRegex.test(q.name)) ||
+      snap.assignments.some((a) => assignRegex.test(a.name)) ||
+      snap.groups.some((g) => groupRegex.test(g));
 
-    // Check date: become current within 14 days of scheduled date
-    const defaultIso = rules.labs.defaultDates?.[String(n)];
-    const labDate = lab.original.date ?? (defaultIso ? new Date(defaultIso).getTime() : null);
-    if (!labDate) return true;
+    labPresence[n] = hasPresence;
 
-    const windowStart = labDate - 14 * 86_400_000;
-    return now >= windowStart;
-  };
+    if (lab.finalGrade === 'excellent') {
+      labCurrent[n] = false;
+    } else if (lab.result === 'at_risk') {
+      labCurrent[n] = true;
+    } else if (!hasPresence) {
+      labCurrent[n] = false;
+    } else {
+      const defaultIso = rules.labs.defaultDates?.[String(n)];
+      const labDate = lab.original.date ?? (defaultIso ? new Date(defaultIso).getTime() : null);
+      labCurrent[n] = !labDate || now >= labDate - 14 * 86_400_000;
+    }
+  }
+
+  const labHasMoodle = (n: number) => labPresence[n] ?? false;
+  const isLabCurrent = (n: number) => labCurrent[n] ?? false;
 
   return rules.tasks.map((r: TaskRule): TaskModel => {
     const dues = Array.isArray(r.due) ? r.due : [r.due, r.due];

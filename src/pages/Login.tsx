@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MANAGE_TOKEN_URL, createLaunchUrl, parseRedirect, setToken } from '../moodle/auth';
+import { setHfToken } from '../moodle/hfClient';
 import { GraduationCap, ExternalLink, AlertCircle, Loader2, Info } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { HeaderActions } from '../components/HeaderActions';
@@ -62,11 +63,15 @@ export function LoginPage() {
             message = json.error || json.message;
           }
         } catch {
-          if (res.status === 503 || res.status === 504) {
+          if (res.status === 400 || res.status === 401) {
+            message = 'Érvénytelen felhasználónév vagy jelszó.';
+          } else if (res.status === 429) {
+            message = 'Túl sok próbálkozás. Kérjük, várj 1 percet!';
+          } else if (res.status === 503 || res.status === 504) {
             message = `A backend szerver nem válaszolt időben (HTTP ${res.status}). Próbáld újra pár másodperc múlva.`;
           } else if (res.status === 404) {
             message = `A bejelentkezési végpont nem található (HTTP 404). Ellenőrizd a backend URL-t.`;
-          } else {
+          } else if (text.trim()) {
             message = `Szerverhiba (${res.status}): ${text.slice(0, 100)}`;
           }
         }
@@ -86,7 +91,7 @@ export function LoginPage() {
 
       setToken(data.token);
       if (data.ltik) {
-        localStorage.setItem('softeng.ltik', data.ltik);
+        setHfToken(data.ltik);
       }
       window.location.reload();
     } catch (err) {

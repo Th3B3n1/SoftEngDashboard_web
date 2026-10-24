@@ -29,6 +29,7 @@ export function GradePage() {
   const selForecast = forecast(rules, selectedLevel);
   const maxForecast = forecast(rules, maxLevel);
 
+  const curProposed = proposedGrade(rules.levels, levelNum);
   const selProposed = proposedGrade(rules.levels, selectedLevel);
   const maxProposed = proposedGrade(rules.levels, maxLevel);
 
@@ -271,7 +272,7 @@ export function GradePage() {
                     <span className="grade-name-text">{r.name}</span>
                   </div>
                   <span className="grade-val-col">
-                    {getCellContent(r.index, curForecast, proposedGrade(rules.levels, levelNum))}
+                    {getCellContent(r.index, curForecast, curProposed)}
                   </span>
                   <span className="grade-val-col highlight">
                     {getCellContent(r.index, selForecast, selProposed)}

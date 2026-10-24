@@ -9,7 +9,10 @@ export const hasToken = () => !!getToken();
 export const setToken = (t: string) => localStorage.setItem(TOKEN_KEY, t);
 export const clearToken = () => {
   localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(PASSPORT_KEY);
+  localStorage.removeItem('softeng.ltik');
   sessionStorage.removeItem('moodle.snapshot');
+  sessionStorage.removeItem('hf.status');
 };
 
 /** Direct link to user's token management page on Moodle */
@@ -21,7 +24,9 @@ export const MANAGE_TOKEN_URL = `${MOODLE_BASE}/user/managetoken.php`;
  * instead of issuing an immediate HTTP redirect that mobile browsers fail to display.
  */
 export function createLaunchUrl(): string {
-  const passport = String(Math.floor(Math.random() * 1e9));
+  const randomBuf = new Uint32Array(1);
+  crypto.getRandomValues(randomBuf);
+  const passport = String(100_000_000 + (randomBuf[0] % 900_000_000));
   localStorage.setItem(PASSPORT_KEY, passport);
   return `${MOODLE_BASE}/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=${passport}&urlscheme=${SCHEME}&confirmed=1`;
 }

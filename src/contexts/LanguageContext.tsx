@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from 'react';
 import { translations, type Language } from '../i18n/translations';
+import { fmtDate, fmtDateTime, fmtLabDate, relDays } from '../format';
 
 interface LanguageContextType {
   lang: Language;
@@ -40,10 +41,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const t = useCallback(
     (key: keyof typeof translations.hu, params?: Record<string, string | number>): string => {
       const dict = translations[lang] || translations.hu;
-      let text = (dict as any)[key] || (translations.hu as any)[key] || String(key);
+      let text: string = (dict as Record<string, string>)[key] || (translations.hu as Record<string, string>)[key] || String(key);
       if (params) {
         for (const [pKey, pVal] of Object.entries(params)) {
-          text = text.replace(new RegExp(`\\{${pKey}\\}`, 'g'), String(pVal));
+          text = text.replaceAll(`{${pKey}}`, String(pVal));
         }
       }
       return text;
@@ -51,80 +52,29 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     [lang]
   );
 
-  const formatDate = useCallback(
-    (ms: number | string | Date) => {
-      const d = typeof ms === 'number' ? new Date(ms) : typeof ms === 'string' ? new Date(ms) : ms;
-      return new Intl.DateTimeFormat(lang === 'hu' ? 'hu-HU' : 'en-US', {
-        month: 'short',
-        day: 'numeric',
-      }).format(d);
-    },
-    [lang]
-  );
-
-  const formatDateTime = useCallback(
-    (ms: number | string | Date) => {
-      const d = typeof ms === 'number' ? new Date(ms) : typeof ms === 'string' ? new Date(ms) : ms;
-      return new Intl.DateTimeFormat(lang === 'hu' ? 'hu-HU' : 'en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(d);
-    },
-    [lang]
-  );
-
-  const formatLabDate = useCallback(
-    (ms: number | string | Date) => {
-      const d = typeof ms === 'number' ? new Date(ms) : typeof ms === 'string' ? new Date(ms) : ms;
-      return new Intl.DateTimeFormat(lang === 'hu' ? 'hu-HU' : 'en-US', {
-        month: 'short',
-        day: 'numeric',
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(d);
-    },
-    [lang]
-  );
-
+  const formatDate = useCallback((ms: number | string | Date) => fmtDate(ms, lang), [lang]);
+  const formatDateTime = useCallback((ms: number | string | Date) => fmtDateTime(ms, lang), [lang]);
+  const formatLabDate = useCallback((ms: number | string | Date) => fmtLabDate(ms, lang), [lang]);
   const formatRelDays = useCallback(
-    (target: number | string | Date, now = Date.now()) => {
-      const targetMs = typeof target === 'number' ? target : new Date(target).getTime();
-      const d = Math.ceil((targetMs - now) / 86_400_000);
-      if (lang === 'hu') {
-        if (d < 0) return `${-d} napja lejárt`;
-        if (d === 0) return 'ma';
-        if (d === 1) return '1 nap múlva';
-        return `${d} nap múlva`;
-      } else {
-        if (d < 0) return `${-d}d ago`;
-        if (d === 0) return 'today';
-        if (d === 1) return 'in 1 day';
-        return `in ${d} days`;
-      }
-    },
+    (target: number | string | Date, now = Date.now()) => relDays(target, now, lang),
     [lang]
   );
 
-  return (
-    <LanguageContext.Provider
-      value={{
-        lang,
-        setLang,
-        toggleLang,
-        t,
-        formatDate,
-        formatDateTime,
-        formatLabDate,
-        formatRelDays,
-      }}
-    >
-      {children}
-    </LanguageContext.Provider>
+  const value = useMemo(
+    () => ({
+      lang,
+      setLang,
+      toggleLang,
+      t,
+      formatDate,
+      formatDateTime,
+      formatLabDate,
+      formatRelDays,
+    }),
+    [lang, setLang, toggleLang, t, formatDate, formatDateTime, formatLabDate, formatRelDays]
   );
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
 export function useLanguage() {

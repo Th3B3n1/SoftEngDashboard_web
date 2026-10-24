@@ -158,8 +158,31 @@ export function OverviewPage() {
           <div className="status-bar">
             <span className="status-label">{t('status')}</span>
             <div className="status-value-pill">
-              <span className="status-dot" style={{ background: 'var(--color-green)' }} />
-              <span style={{ color: 'var(--color-green)' }}>{t('onTrack')}</span>
+              <span
+                className="status-dot"
+                style={{
+                  background:
+                    m.labs.signature === 'failed'
+                      ? 'rgb(122, 31, 31)'
+                      : m.labs.signature === 'at_risk'
+                      ? 'var(--color-red)'
+                      : 'var(--color-green)',
+                }}
+              />
+              <span
+                style={{
+                  color:
+                    m.labs.signature === 'failed' || m.labs.signature === 'at_risk'
+                      ? 'var(--color-red)'
+                      : 'var(--color-green)',
+                }}
+              >
+                {m.labs.signature === 'failed'
+                  ? t('failed')
+                  : m.labs.signature === 'at_risk'
+                  ? t('atRisk')
+                  : t('onTrack')}
+              </span>
             </div>
           </div>
 

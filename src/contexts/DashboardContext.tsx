@@ -6,7 +6,7 @@ import { clearToken, getToken } from '../moodle/auth';
 import { MoodleError } from '../moodle/client';
 import { fetchSnapshot } from '../moodle/snapshot';
 import type { MoodleSnapshot } from '../moodle/types';
-import { fetchHfStatus, type HfStatus } from '../moodle/hfClient';
+import { clearHfToken, fetchHfStatus, type HfStatus } from '../moodle/hfClient';
 import { Loader2, AlertCircle, LogOut } from 'lucide-react';
 
 const CACHE_KEY = 'moodle.snapshot';
@@ -65,6 +65,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     clearToken();
+    clearHfToken();
     sessionStorage.removeItem(CACHE_KEY);
     sessionStorage.removeItem('hf.status');
     window.location.reload();
@@ -77,19 +78,23 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     try {
       const token = getToken();
       if (!token) return;
-      const s = await fetchSnapshot(token, rules.courseId, setProgress);
+
+      const hfPromise = fetchHfStatus().catch((err) => {
+        console.warn('HF status sync warning:', err);
+        return null;
+      });
+
+      const [s, hf] = await Promise.all([
+        fetchSnapshot(token, rules.courseId, setProgress),
+        hfPromise,
+      ]);
+
       sessionStorage.setItem(CACHE_KEY, JSON.stringify(s));
       setSnap(s);
 
-      // Always fetch live HF Portal status in the background
-      try {
-        const hf = await fetchHfStatus();
-        if (hf) {
-          sessionStorage.setItem('hf.status', JSON.stringify(hf));
-          setHfStatus(hf);
-        }
-      } catch (err) {
-        console.warn('HF status sync warning:', err);
+      if (hf) {
+        sessionStorage.setItem('hf.status', JSON.stringify(hf));
+        setHfStatus(hf);
       }
     } catch (e) {
       if (e instanceof MoodleError && e.isAuth) return logout();
@@ -126,7 +131,12 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     return baseModel;
   }, [snap, hfStatus]);
 
-  if (!model) {
+  const contextValue = useMemo(
+    () => (model ? { model, refresh, refreshing, progress, error, logout, updateHfStatus } : null),
+    [model, refresh, refreshing, progress, error, logout, updateHfStatus]
+  );
+
+  if (!model || !contextValue) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-page)' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', maxWidth: '420px', padding: '20px', textAlign: 'center' }}>
@@ -156,7 +166,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <DashboardContext.Provider value={{ model, refresh, refreshing, progress, error, logout, updateHfStatus }}>
+    <DashboardContext.Provider value={contextValue}>
       {children}
     </DashboardContext.Provider>
   );

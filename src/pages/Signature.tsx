@@ -144,9 +144,26 @@ export function SignaturePage() {
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ width: '11px', height: '11px', borderRadius: '50%', background: 'rgb(47, 158, 68)', flexShrink: 0 }} />
+            <span
+              style={{
+                width: '11px',
+                height: '11px',
+                borderRadius: '50%',
+                background:
+                  m.labs.signature === 'failed'
+                    ? 'rgb(122, 31, 31)'
+                    : m.labs.signature === 'at_risk'
+                    ? 'rgb(224, 49, 49)'
+                    : 'rgb(47, 158, 68)',
+                flexShrink: 0,
+              }}
+            />
             <span style={{ fontSize: '20px', color: '#f1f3f5', fontWeight: 800 }}>
-              {t('onTrack')}
+              {m.labs.signature === 'failed'
+                ? t('failed')
+                : m.labs.signature === 'at_risk'
+                ? t('atRisk')
+                : t('onTrack')}
             </span>
           </div>
           <span style={{ fontSize: '13px', color: 'rgb(166, 167, 171)' }}>

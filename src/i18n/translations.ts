@@ -27,7 +27,7 @@ export const translations = {
     vpnWarningTitle: 'Fontos tudnivaló a házi feladat szinkronizációhoz:',
     vpnWarningBody: 'A Házi Feladat Portál elérése az egyetemi hálózatra van korlátozva. A házi feladat pontok automatikus szinkronizálásához bejelentkezés előtt mindenképpen csatlakozz a BME VPN-re vagy az egyetemi Eduroam hálózatra!',
     usernameLabel: 'eduID',
-    passwordLabel: 'Password',
+    passwordLabel: 'Jelszó',
     loginBtn: 'Bejelentkezés',
     loggingIn: 'Azonosítás folyamatban…',
     manualNotice: 'Nyisd meg a Moodle biztonsági kulcsok oldalát, és másold ki a mobil token kulcsot:',
