@@ -81,9 +81,9 @@ export function LoginPage() {
     }
   };
 
-  const handleLaunchSso = () => {
+  const handleLaunchSso = (forceCopyableScheme = false) => {
     setErrorSso(null);
-    const url = createLaunchUrl();
+    const url = createLaunchUrl(forceCopyableScheme);
     window.open(url, '_blank', 'noopener');
   };
 
@@ -296,7 +296,7 @@ export function LoginPage() {
               <button
                 type="button"
                 className="btn-primary"
-                onClick={handleLaunchSso}
+                onClick={() => handleLaunchSso(false)}
                 style={{
                   width: '100%',
                   display: 'inline-flex',
@@ -478,7 +478,7 @@ export function LoginPage() {
                 <button
                   type="button"
                   className="btn-secondary"
-                  onClick={handleLaunchSso}
+                  onClick={() => handleLaunchSso(true)}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
                   <span>Moodle SSO</span>
@@ -494,7 +494,7 @@ export function LoginPage() {
                   id="manual-token"
                   rows={3}
                   className="form-textarea"
-                  placeholder="32 karakteres token vagy web+softengbme://token=..."
+                  placeholder="32 karakteres token, https://token=... vagy web+softengbme://token=..."
                   value={pasted}
                   onChange={(e) => {
                     setPasted(e.target.value);

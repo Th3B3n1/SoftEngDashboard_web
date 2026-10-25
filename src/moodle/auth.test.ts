@@ -34,6 +34,23 @@ describe('parseRedirect token extractor', () => {
     expect(parseRedirect(`moodlemobile://token=${b64}`)).toBe(token);
   });
 
+  it('accepts https://token= URLs even when lowercased by mobile browser URL normalization', () => {
+    const passportHash = '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d';
+    const privateToken = 'AbCdEf0123456789+/=AbCdEf0123456789';
+
+    // With private token
+    const b64WithPriv = Buffer.from(`${passportHash}:::${token}:::${privateToken}`).toString('base64');
+    const normalizedWithPriv = new URL(`https://token=${b64WithPriv}`).href;
+    expect(parseRedirect(normalizedWithPriv)).toBe(token);
+    expect(parseRedirect(`https://token=${b64WithPriv.toLowerCase()}`)).toBe(token);
+
+    // Without private token
+    const b64WithoutPriv = Buffer.from(`${passportHash}:::${token}`).toString('base64');
+    const normalizedWithoutPriv = new URL(`https://token=${b64WithoutPriv}`).href;
+    expect(parseRedirect(normalizedWithoutPriv)).toBe(token);
+    expect(parseRedirect(`https://token=${b64WithoutPriv.toLowerCase()}`)).toBe(token);
+  });
+
   it('rejects invalid inputs', () => {
     expect(() => parseRedirect('short')).toThrow();
     expect(() => parseRedirect('moodlemobile://token=notbase64!!!')).toThrow();

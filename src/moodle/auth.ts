@@ -55,10 +55,25 @@ export const MANAGE_TOKEN_URL = `${MOODLE_BASE}/user/managetoken.php`;
 export const HF_LTI_LAUNCH_URL = `${MOODLE_BASE}/mod/lti/launch.php?id=221136`;
 
 /**
+ * Detects mobile / tablet devices (including iPadOS which reports MacIntel with touch points).
+ */
+export function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return (
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+/**
  * Checks if the browser supports custom web+ protocol handlers (Desktop Chrome/Edge/Firefox/Brave).
  */
 export function isProtocolHandlerSupported(): boolean {
-  return typeof navigator !== 'undefined' && typeof navigator.registerProtocolHandler === 'function';
+  return (
+    typeof navigator !== 'undefined' &&
+    typeof navigator.registerProtocolHandler === 'function' &&
+    !isMobileDevice()
+  );
 }
 
 /**
@@ -80,23 +95,57 @@ export function registerSsoProtocolHandler(): boolean {
 
 /**
  * Official Moodle Mobile SSO flow (works with EduID/Shibboleth on idp.bme.hu).
- * On desktop (`confirmed=0`), Moodle issues a direct HTTP 303 redirect to `web+softengbme://token=...`.
- * On mobile (`confirmed=1`), Moodle renders an HTML page with a button whose link can be copied.
+ * - On desktop when protocol handler is used (`forceCopyableScheme=false`), Moodle redirects to `web+softengbme://token=...`.
+ * - On mobile / iOS or manual copy (`forceCopyableScheme=true`), we pass `urlscheme=https&confirmed=1` so Moodle
+ *   renders `<a href="https://token=...">`. Unlike custom schemes (`web+softengbme://`), iOS Safari allows copying
+ *   `https://` links via long-press ("Copy") and also places the URL directly into the Safari address bar.
  */
-export function createLaunchUrl(forceConfirmedPage = false): string {
+export function createLaunchUrl(forceCopyableScheme = false): string {
   const randomBuf = new Uint32Array(1);
   crypto.getRandomValues(randomBuf);
   const passport = String(100_000_000 + (randomBuf[0] % 900_000_000));
   localStorage.setItem(PASSPORT_KEY, passport);
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const confirmed = forceConfirmedPage || isMobile ? '&confirmed=1' : '';
-  return `${MOODLE_BASE}/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=${passport}&urlscheme=${encodeURIComponent(SSO_SCHEME)}${confirmed}`;
+  const useCopyableHttps = forceCopyableScheme || isMobileDevice() || !isProtocolHandlerSupported();
+  const scheme = useCopyableHttps ? 'https' : SSO_SCHEME;
+  const confirmed = useCopyableHttps ? '&confirmed=1' : '';
+  return `${MOODLE_BASE}/admin/tool/mobile/launch.php?service=moodle_mobile_app&passport=${passport}&urlscheme=${encodeURIComponent(scheme)}${confirmed}`;
+}
+
+/**
+ * Restores exact Base64 casing when a browser's URL parser lowercases the hostname portion of `https://token=<b64>`.
+ * Because Moodle's payload starts with `md5_hex(32):::token_hex(32)[:::privatetoken]`, the first 67-69 bytes only
+ * contain characters from `0123456789abcdef:`, whose Base64 alphabet at each `i % 4` position has disjoint
+ * uppercase and lowercase letters (0 collisions across all 4,913 triplets).
+ */
+function restoreCaseForHexColonB64(b64: string): string {
+  const clean = b64.replace(/=+$/, '');
+  const hasPrivateToken = clean.length > 90;
+  const UPPER_AT_POS = [
+    new Set('mnoyz'),
+    new Set('dgtw'),
+    new Set('abefijmnqruvyz'),
+    new Set(),
+  ];
+  const chars = clean.split('');
+  const limit = Math.min(chars.length, 92);
+  for (let i = 0; i < limit; i++) {
+    const ch = chars[i].toLowerCase();
+    if (!hasPrivateToken && i === 89) {
+      chars[i] = ch === 'a' || ch === 'q' ? ch.toUpperCase() : ch;
+    } else if (UPPER_AT_POS[i % 4].has(ch)) {
+      chars[i] = ch.toUpperCase();
+    } else {
+      chars[i] = ch;
+    }
+  }
+  const str = chars.join('');
+  return str + '='.repeat((4 - (str.length % 4)) % 4);
 }
 
 /**
  * Accepts:
  *  - Raw 32-character hex token (e.g. from managetoken.php)
- *  - Full `web+softengbme://token=...` or `moodlemobile://token=...` URL (raw or URL-encoded)
+ *  - Full `web+softengbme://token=...`, `https://token=...`, or `moodlemobile://token=...` URL (raw, lowercased, or URL-encoded)
  *  - Raw base64 token string
  */
 export function parseRedirect(input: string): string {
@@ -128,24 +177,26 @@ export function parseRedirect(input: string): string {
   b64 = decodeURIComponent(b64).replace(/-/g, '+').replace(/_/g, '/').trim();
   // Remove any trailing slash added by browser protocol handler normalization
   b64 = b64.replace(/\/+$/, '');
-  b64 += '='.repeat((4 - (b64.length % 4)) % 4);
+  const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
 
-  let decoded: string;
-  try {
-    decoded = atob(b64);
-  } catch {
-    throw new Error('Nem sikerült értelmezni a beillesztett szöveget. Ellenőrizd a kimásolt tokent vagy linket.');
-  }
-
-  // Moodle encodes as: md5(site+passport):::token[:::privatetoken]
-  const parts = decoded.split(':::');
-  if (parts.length >= 2 && /^[0-9a-f]{32}$/i.test(parts[1])) {
-    return parts[1];
-  }
-
-  // In case the decoded payload is itself a 32-char hex string
-  if (/^[0-9a-f]{32}$/i.test(decoded.trim())) {
-    return decoded.trim();
+  // Try decoding as-is first, then with case-restoration (for `https://token=...` where browser lowercases the host)
+  for (const candidate of [padded, restoreCaseForHexColonB64(padded)]) {
+    try {
+      const decoded = atob(candidate);
+      const match = decoded.match(/^[0-9a-f]{32}:::([0-9a-f]{32})/i);
+      if (match) {
+        return match[1];
+      }
+      const parts = decoded.split(':::');
+      if (parts.length >= 2 && /^[0-9a-f]{32}$/i.test(parts[1])) {
+        return parts[1];
+      }
+      if (/^[0-9a-f]{32}$/i.test(decoded.trim())) {
+        return decoded.trim();
+      }
+    } catch {
+      // try next candidate
+    }
   }
 
   throw new Error('A beillesztett szöveg nem tartalmaz érvényes Moodle tokent.');
