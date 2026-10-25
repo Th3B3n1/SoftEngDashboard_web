@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { computeDashboard, rules } from '../engine/engine';
 import { applyHfDataToModel } from '../engine/hfIntegration';
 import type { DashboardModel } from '../engine/types';
-import { clearToken, getToken } from '../moodle/auth';
+import { clearToken, ensureProtectedToken, getToken } from '../moodle/auth';
 import { MoodleError } from '../moodle/client';
 import { fetchSnapshot } from '../moodle/snapshot';
 import type { MoodleSnapshot } from '../moodle/types';
@@ -76,10 +76,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setRefreshing(true);
     setError(null);
     try {
-      const token = getToken();
-      if (!token) return;
+      const rawOrEncToken = getToken();
+      if (!rawOrEncToken) return;
 
-      const hfPromise = fetchHfStatus().catch((err) => {
+      // Upgrade any unencrypted token in localStorage to a server-encrypted token
+      const token = await ensureProtectedToken(rawOrEncToken);
+
+      const hfPromise = fetchHfStatus(undefined, token).catch((err) => {
         console.warn('HF status sync warning:', err);
         return null;
       });

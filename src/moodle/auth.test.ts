@@ -19,6 +19,9 @@ describe('parseRedirect token extractor', () => {
 
     expect(parseRedirect(`moodlemobile://token=${b64}`)).toBe(token);
     expect(parseRedirect(`moodlemobile://token=${b64}&redirect=none`)).toBe(token);
+    expect(parseRedirect(`web+softengbme://token=${b64}`)).toBe(token);
+    expect(parseRedirect(`web+softengbme://token=${b64}/`)).toBe(token);
+    expect(parseRedirect(encodeURIComponent(`web+softengbme://token=${b64}`))).toBe(token);
     expect(parseRedirect(b64)).toBe(token);
   });
 

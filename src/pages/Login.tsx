@@ -1,14 +1,28 @@
 import { useState, useEffect } from 'react';
-import { MANAGE_TOKEN_URL, createLaunchUrl, parseRedirect, setToken } from '../moodle/auth';
+import {
+  MANAGE_TOKEN_URL,
+  createLaunchUrl,
+  parseRedirect,
+  setToken,
+  ensureProtectedToken,
+  consumeUrlSsoToken,
+  isProtocolHandlerSupported,
+  registerSsoProtocolHandler,
+} from '../moodle/auth';
 import { setHfToken } from '../moodle/hfClient';
-import { GraduationCap, ExternalLink, AlertCircle, Loader2, Info } from 'lucide-react';
+import { GraduationCap, ExternalLink, AlertCircle, Loader2, Info, ShieldCheck, ClipboardPaste } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { HeaderActions } from '../components/HeaderActions';
 import { BACKEND_URL } from '../config';
 
 export function LoginPage() {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'direct' | 'manual'>('direct');
+  const [activeTab, setActiveTab] = useState<'direct' | 'sso' | 'manual'>('direct');
+
+  // SSO state
+  const [protocolPromptShown, setProtocolPromptShown] = useState(false);
+  const [errorSso, setErrorSso] = useState<string | null>(null);
+  const [busyClipboard, setBusyClipboard] = useState(false);
 
   // Direct backend login state
   const [username, setUsername] = useState('');
@@ -20,25 +34,80 @@ export function LoginPage() {
   const [pasted, setPasted] = useState('');
   const [errorManual, setErrorManual] = useState<string | null>(null);
   const [busyManual, setBusyManual] = useState(false);
-  const [launchUrl, setLaunchUrl] = useState<string | null>(null);
 
-  // Auto-detect token in URL query params if redirected
+  const supportsProtocolHandler = isProtocolHandlerSupported();
+
+  // Auto-detect token in URL query params or from secondary SSO tab via BroadcastChannel / storage
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#\/?/, ''));
-    const candidate = params.get('token') || params.get('url') || hashParams.get('token') || hashParams.get('url');
-
-    if (candidate) {
-      try {
-        const token = parseRedirect(candidate);
-        setToken(token);
-        window.history.replaceState({}, document.title, window.location.pathname);
-        window.location.reload();
-      } catch {
-        // Ignore non-matching parameters
-      }
+    const token = consumeUrlSsoToken();
+    if (token) {
+      window.location.reload();
+      return;
     }
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      if ('BroadcastChannel' in window) {
+        bc = new BroadcastChannel('softeng_auth');
+        bc.onmessage = (ev) => {
+          if (ev.data?.type === 'SSO_TOKEN' && ev.data?.token) {
+            setToken(ev.data.token);
+            window.location.reload();
+          }
+        };
+      }
+    } catch {
+      // ignore BroadcastChannel errors
+    }
+
+    const onStorage = (ev: StorageEvent) => {
+      if (ev.key === 'moodle.token' && ev.newValue) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+
+    return () => {
+      bc?.close();
+      window.removeEventListener('storage', onStorage);
+    };
   }, []);
+
+  const handleEnableProtocolHandler = () => {
+    setErrorSso(null);
+    const ok = registerSsoProtocolHandler();
+    if (ok) {
+      setProtocolPromptShown(true);
+    }
+  };
+
+  const handleLaunchSso = () => {
+    setErrorSso(null);
+    const url = createLaunchUrl();
+    window.open(url, '_blank', 'noopener');
+  };
+
+  const handlePasteFromClipboard = async () => {
+    setErrorSso(null);
+    setBusyClipboard(true);
+    try {
+      if (!navigator.clipboard?.readText) {
+        setActiveTab('manual');
+        setBusyClipboard(false);
+        return;
+      }
+      const clipText = await navigator.clipboard.readText();
+      if (!clipText.trim()) {
+        throw new Error('A vágólap üres. Másold ki a linket a Moodle oldalról, vagy használd a Kézi token fület!');
+      }
+      const token = parseRedirect(clipText);
+      await ensureProtectedToken(token);
+      window.location.reload();
+    } catch (err) {
+      setErrorSso(err instanceof Error ? err.message : String(err));
+      setBusyClipboard(false);
+    }
+  };
 
   const handleDirectLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,14 +169,14 @@ export function LoginPage() {
     }
   };
 
-  const handleManualSubmit = () => {
+  const handleManualSubmit = async () => {
     if (!pasted.trim()) return;
     setBusyManual(true);
     setErrorManual(null);
 
     try {
       const token = parseRedirect(pasted);
-      setToken(token);
+      await ensureProtectedToken(token);
       window.location.reload();
     } catch (err) {
       setErrorManual(err instanceof Error ? err.message : String(err));
@@ -157,7 +226,7 @@ export function LoginPage() {
 
         {/* Login Card */}
         <div className="card" style={{ padding: '24px' }}>
-          {/* Tabs Navigation */}
+          {/* 3-Tab Navigation (Direct first) */}
           <div className="login-tabs-header">
             <button
               type="button"
@@ -168,6 +237,13 @@ export function LoginPage() {
             </button>
             <button
               type="button"
+              className={`login-tab-btn ${activeTab === 'sso' ? 'active' : ''}`}
+              onClick={() => setActiveTab('sso')}
+            >
+              {t('tabSso')}
+            </button>
+            <button
+              type="button"
               className={`login-tab-btn ${activeTab === 'manual' ? 'active' : ''}`}
               onClick={() => setActiveTab('manual')}
             >
@@ -175,7 +251,118 @@ export function LoginPage() {
             </button>
           </div>
 
-          {/* Direct Login Form */}
+          {/* TAB 1: EduID SSO Redirect Flow */}
+          {activeTab === 'sso' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--text-body)', lineHeight: 1.5, margin: 0 }}>
+                {t('ssoIntro')}
+              </p>
+
+              {supportsProtocolHandler && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={handleEnableProtocolHandler}
+                    style={{
+                      width: '100%',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <ShieldCheck size={16} />
+                    <span>{t('ssoEnableRedirectBtn')}</span>
+                  </button>
+                  {protocolPromptShown && (
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        color: 'rgb(81, 207, 102)',
+                        background: 'rgba(47, 158, 68, 0.12)',
+                        border: '1px solid rgba(47, 158, 68, 0.3)',
+                        borderRadius: '8px',
+                        padding: '8px 12px',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {t('ssoRedirectRegisteredMsg')}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={handleLaunchSso}
+                style={{
+                  width: '100%',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '11px 16px',
+                  fontSize: '14px',
+                }}
+              >
+                <span>{supportsProtocolHandler ? t('ssoLaunchBtn') : t('ssoLaunchBtnMobile')}</span>
+                <ExternalLink size={16} />
+              </button>
+
+              {/* Fallback 1-click clipboard login for Brave / mobile */}
+              <div
+                style={{
+                  borderTop: '1px solid var(--border-subtle)',
+                  paddingTop: '14px',
+                  marginTop: '2px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.45, margin: 0 }}>
+                  {t('ssoFallbackHint')}
+                </p>
+
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={handlePasteFromClipboard}
+                  disabled={busyClipboard}
+                  style={{
+                    width: '100%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  {busyClipboard ? (
+                    <>
+                      <Loader2 size={16} className="spin" />
+                      <span>{t('loggingIn')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <ClipboardPaste size={16} />
+                      <span>{t('ssoPasteClipboardBtn')}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {errorSso && (
+                <div className="alert alert-danger" style={{ marginBottom: 0 }}>
+                  <AlertCircle size={18} style={{ flexShrink: 0 }} />
+                  <div>{errorSso}</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 2: Direct Backend EduID Login Form */}
           {activeTab === 'direct' && (
             <form onSubmit={handleDirectLogin}>
               <div className="form-group">
@@ -189,7 +376,7 @@ export function LoginPage() {
                     inputMode="numeric"
                     pattern="[0-9]*"
                     className="form-input"
-                    style={{ maxWidth: '320px', flex: '1 1 320px' }}
+                    style={{ maxWidth: '320px', flex: '1 1 320px', minWidth: 0 }}
                     placeholder=""
                     required
                     value={username}
@@ -211,7 +398,7 @@ export function LoginPage() {
                     }}
                     autoComplete="username"
                   />
-                  <span style={{ fontSize: '15px', color: 'var(--text-body)', fontWeight: 500, userSelect: 'none' }}>
+                  <span style={{ fontSize: '15px', color: 'var(--text-body)', fontWeight: 500, userSelect: 'none', flexShrink: 0 }}>
                     @bme.hu
                   </span>
                 </div>
@@ -238,7 +425,7 @@ export function LoginPage() {
 
               {errorDirect && (
                 <div className="alert alert-danger">
-                  <AlertCircle size={18} className="alert-icon" />
+                  <AlertCircle size={18} style={{ flexShrink: 0 }} />
                   <div>{errorDirect}</div>
                 </div>
               )}
@@ -246,9 +433,15 @@ export function LoginPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn-primary"
                   disabled={busyDirect || !username.trim() || !password}
-                  style={{ width: '100%' }}
+                  style={{
+                    width: '100%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                  }}
                 >
                   {busyDirect ? (
                     <>
@@ -263,44 +456,34 @@ export function LoginPage() {
             </form>
           )}
 
-          {/* Manual Token Paste */}
+          {/* TAB 3: Manual Token Paste */}
           {activeTab === 'manual' && (
-            <div className="flex-col gap-4">
-              <p className="text-sm text-secondary" style={{ lineHeight: 1.5 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <p style={{ fontSize: '13.5px', color: 'var(--text-body)', lineHeight: 1.5, margin: 0 }}>
                 {t('manualNotice')}
               </p>
 
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 <a
                   href={MANAGE_TOKEN_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn btn-secondary btn-sm"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  className="btn-secondary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}
                 >
                   <span>{t('manageTokensBtn')}</span>
                   <ExternalLink size={14} />
                 </a>
 
-                {launchUrl ? (
-                  <a
-                    href={launchUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn btn-secondary btn-sm"
-                  >
-                    <span>SSO Megnyitása</span>
-                    <ExternalLink size={14} />
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    className="btn btn-subtle btn-sm"
-                    onClick={() => setLaunchUrl(createLaunchUrl())}
-                  >
-                    SSO link generálása
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={handleLaunchSso}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <span>Moodle SSO</span>
+                  <ExternalLink size={14} />
+                </button>
               </div>
 
               <div className="form-group" style={{ marginBottom: 0 }}>
@@ -311,7 +494,7 @@ export function LoginPage() {
                   id="manual-token"
                   rows={3}
                   className="form-textarea"
-                  placeholder="32 karakteres token vagy moodlemobile://token=..."
+                  placeholder="32 karakteres token vagy web+softengbme://token=..."
                   value={pasted}
                   onChange={(e) => {
                     setPasted(e.target.value);
@@ -321,17 +504,18 @@ export function LoginPage() {
               </div>
 
               {errorManual && (
-                <div className="alert alert-danger">
-                  <AlertCircle size={18} className="alert-icon" />
+                <div className="alert alert-danger" style={{ marginBottom: 0 }}>
+                  <AlertCircle size={18} style={{ flexShrink: 0 }} />
                   <div>{errorManual}</div>
                 </div>
               )}
 
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn-primary"
                 onClick={handleManualSubmit}
                 disabled={busyManual || !pasted.trim()}
+                style={{ width: '100%' }}
               >
                 {busyManual ? (
                   <>

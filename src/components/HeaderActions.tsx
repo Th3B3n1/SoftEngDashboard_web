@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useDashboard } from '../contexts/DashboardContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getHfToken, setHfToken, fetchHfStatus, parseHfJson } from '../moodle/hfClient';
+import { HF_LTI_LAUNCH_URL } from '../moodle/auth';
+import { ExternalLink } from 'lucide-react';
 
 export function useTheme() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
@@ -156,6 +158,25 @@ function AuthenticatedActions() {
             <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: 1.5 }}>
               {t('ltiHelp')}
             </p>
+            <div style={{ marginBottom: '12px' }}>
+              <a
+                href={HF_LTI_LAUNCH_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-secondary"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  textDecoration: 'none',
+                  fontSize: '12.5px',
+                  padding: '7px 12px',
+                }}
+              >
+                <span>{t('openHfLtiBtn')}</span>
+                <ExternalLink size={14} />
+              </a>
+            </div>
             <textarea
               className="input-field"
               rows={4}
