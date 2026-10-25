@@ -82,7 +82,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       // Upgrade any unencrypted token in localStorage to a server-encrypted token
       const token = await ensureProtectedToken(rawOrEncToken);
 
-      const hfPromise = fetchHfStatus(undefined, token).catch((err) => {
+      const hfPromise = fetchHfStatus().catch((err) => {
         console.warn('HF status sync warning:', err);
         return null;
       });

@@ -97,7 +97,7 @@ export function parseHfJson(raw: string): HfStatus | null {
   return null;
 }
 
-export async function fetchHfStatus(ltik?: string, wsToken?: string): Promise<HfStatus | null> {
+export async function fetchHfStatus(ltik?: string): Promise<HfStatus | null> {
   const token = ltik ? extractLtik(ltik) : getHfToken();
 
   if (token) {
@@ -112,29 +112,6 @@ export async function fetchHfStatus(ltik?: string, wsToken?: string): Promise<Hf
       console.warn(`HF proxy returned status ${res.status}`);
     } catch (err) {
       console.warn('Failed to fetch HF status via proxy:', err);
-    }
-  }
-
-  // If no ltik is stored (or it expired) and we have the student's Moodle token,
-  // attempt automatic LTI launch & HF status sync via the backend
-  if (!ltik && wsToken && /^(enc:[A-Za-z0-9\-_]+|[0-9a-f]{32})$/i.test(wsToken.trim())) {
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/hf/sync-by-moodle-token`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wsToken: wsToken.trim() }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.ltik) {
-          setHfToken(data.ltik);
-        }
-        if (data?.status) {
-          return parseHfData(data.status);
-        }
-      }
-    } catch (err) {
-      console.warn('Automatic HF sync via Moodle token not available:', err);
     }
   }
 
