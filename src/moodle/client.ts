@@ -28,7 +28,7 @@ function flatten(params: Record<string, Param>, out = new URLSearchParams(), pre
 }
 
 /**
- * Call a Moodle web-service function via the backend read-only Course 550 proxy.
+ * Call a Moodle web-service function via the backend read-only Course 16995 proxy.
  * Sent as application/x-www-form-urlencoded => a CORS "simple request" (no preflight).
  */
 export async function callWs<T>(token: string, fn: string, params: Record<string, Param> = {}): Promise<T> {

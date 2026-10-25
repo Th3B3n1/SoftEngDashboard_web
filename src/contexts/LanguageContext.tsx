@@ -18,7 +18,7 @@ const LanguageContext = createContext<LanguageContextType | null>(null);
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>(() => {
     try {
-      const saved = localStorage.getItem('softdev_lang');
+      const saved = localStorage.getItem('softeng_lang');
       return saved === 'en' ? 'en' : 'hu';
     } catch {
       return 'hu';
@@ -27,7 +27,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLang = useCallback((newLang: Language) => {
     try {
-      localStorage.setItem('softdev_lang', newLang);
+      localStorage.setItem('softeng_lang', newLang);
     } catch {
       // ignore
     }

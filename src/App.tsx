@@ -6,7 +6,7 @@ import { DashboardProvider } from './contexts/DashboardContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 
 export function App() {
-  // Capture ?sso=web+softdevbme://token=... redirect immediately before checking auth state
+  // Capture ?sso=web+softengbme://token=... redirect immediately before checking auth state
   consumeUrlSsoToken();
 
   return (

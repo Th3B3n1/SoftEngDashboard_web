@@ -104,7 +104,7 @@ export function parseRedirect(input: string): string {
   // Strip surrounding quotes or brackets if present
   raw = raw.replace(/^["'<({\[]+|["'>)}\]]+$/g, '').trim();
 
-  // If URL-encoded (e.g. from ?sso=web%2Bsoftdevbme%3A%2F%2Ftoken%3D...), decode once
+  // If URL-encoded (e.g. from ?sso=web%2Bsoftengbme%3A%2F%2Ftoken%3D...), decode once
   if (raw.includes('%3D') || raw.includes('%3d') || raw.includes('%2F') || raw.includes('%2f')) {
     try {
       raw = decodeURIComponent(raw);
