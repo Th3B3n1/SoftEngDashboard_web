@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../contexts/DashboardContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { GRADE_DOT_COLOR } from '../format';
 import { rules } from '../engine/engine';
 import { forecast, proposedGrade, cumXp } from '../engine/levels';
 
@@ -33,11 +34,11 @@ export function GradePage() {
   const maxProposed = proposedGrade(rules.levels, maxLevel);
 
   const gradeDefs = [
-    { name: t('failGrade'), dotColor: 'rgb(224, 49, 49)', index: 0 },
-    { name: t('passGrade'), dotColor: 'rgb(253, 126, 20)', index: 1 },
-    { name: t('satisfactoryGrade'), dotColor: 'rgb(252, 196, 25)', index: 2 },
-    { name: t('goodGrade'), dotColor: 'rgb(32, 201, 151)', index: 3 },
-    { name: t('excellentGrade'), dotColor: 'rgb(81, 207, 102)', index: 4 },
+    { name: t('failGrade'), dotColor: GRADE_DOT_COLOR.fail, index: 0 },
+    { name: t('passGrade'), dotColor: GRADE_DOT_COLOR.pass, index: 1 },
+    { name: t('satisfactoryGrade'), dotColor: GRADE_DOT_COLOR.satisfactory, index: 2 },
+    { name: t('goodGrade'), dotColor: GRADE_DOT_COLOR.good, index: 3 },
+    { name: t('excellentGrade'), dotColor: GRADE_DOT_COLOR.excellent, index: 4 },
   ];
 
   const getCellContent = (

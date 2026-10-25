@@ -1,6 +1,7 @@
 import type { DashboardModel, HomeAssignmentModel, HomeAssignmentPhase, TaskModel, Level, Rules } from './types';
 import type { HfStatus } from '../moodle/hfClient';
-import { levelProgress, examPointsAt } from './levels';
+import { fmtTimestamp } from '../format';
+import { computeStatsFromTasks } from './levels';
 import rulesJson from '../rules/rules.json';
 
 const defaultRules = rulesJson as unknown as Rules;
@@ -61,41 +62,21 @@ export function applyHfDataToModel(model: DashboardModel, hf: HfStatus): Dashboa
   const rawPhases = model.homeAssignment?.phases ?? {};
   const phases: Record<string, HomeAssignmentPhase> = { ...rawPhases };
 
-  if (phases.registration) {
-    phases.registration = {
-      ...phases.registration,
-      result: isRegistrationDone ? ('completed' as const) : phases.registration.result,
-      completedOn: registrationDate || phases.registration.completedOn,
-    };
-  }
-  if (phases.onboarding) {
-    phases.onboarding = {
-      ...phases.onboarding,
-      result: isOnboardingDone ? ('completed' as const) : phases.onboarding.result,
-      completedOn: onboardingDate || phases.onboarding.completedOn,
-    };
-  }
-  if (phases.coding) {
-    phases.coding = {
-      ...phases.coding,
-      result: isCodingDone ? ('completed' as const) : phases.coding.result,
-      completedOn: codingDate || phases.coding.completedOn,
-    };
-  }
-  if (phases.testing) {
-    phases.testing = {
-      ...phases.testing,
-      result: isTestingDone ? ('completed' as const) : phases.testing.result,
-      completedOn: testingDate || phases.testing.completedOn,
-    };
-  }
-  if (phases.review) {
-    phases.review = {
-      ...phases.review,
-      result: isReviewDone ? ('completed' as const) : phases.review.result,
-      completedOn: reviewDate || phases.review.completedOn,
-    };
-  }
+  const markPhase = (key: string, done: boolean, date: string | null) => {
+    if (phases[key]) {
+      phases[key] = {
+        ...phases[key],
+        result: done ? 'completed' : phases[key].result,
+        completedOn: date || phases[key].completedOn,
+      };
+    }
+  };
+
+  markPhase('registration', isRegistrationDone, registrationDate);
+  markPhase('onboarding', isOnboardingDone, onboardingDate);
+  markPhase('coding', isCodingDone, codingDate);
+  markPhase('testing', isTestingDone, testingDate);
+  markPhase('review', isReviewDone, reviewDate);
 
   const updatedHome: HomeAssignmentModel = {
     windowStartDate: model.homeAssignment?.windowStartDate || '',
@@ -105,135 +86,77 @@ export function applyHfDataToModel(model: DashboardModel, hf: HfStatus): Dashboa
 
   // 3. Update tasks status
   const updatedTasks: TaskModel[] = model.tasks.map((t) => {
+    const complete = (): TaskModel => ({ ...t, status: 'completed', isCurrent: false });
+
     // Coding achievements
-    if (t.key === 'codingStartCodingBy') {
-      const askedDate = codingTask?.askedForEvaluationDate;
-      if (askedDate || codingTask?.status === 'done' || isCodingDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingStartCodingBy' && (codingTask?.askedForEvaluationDate || codingTask?.status === 'done' || isCodingDone)) {
+      return complete();
     }
-    if (t.key === 'codingCompleteCodingBy') {
-      if (codingTask?.status === 'done' || isCodingDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingCompleteCodingBy' && (codingTask?.status === 'done' || isCodingDone)) {
+      return complete();
     }
-    if (t.key === 'codingFunctionalCorrectnessAtLeast') {
-      if (isCodingDone || (codingTask?.status === 'done' && codingTask?.checkCodeCompiles !== false)) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingFunctionalCorrectnessAtLeast' && (isCodingDone || (codingTask?.status === 'done' && codingTask?.checkCodeCompiles !== false))) {
+      return complete();
     }
-    if (t.key === 'codingSonarQubeCodingBugFree') {
-      if (isCodingDone || (codingTask?.status === 'done' && codingTask?.checkSonar !== false)) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingSonarQubeCodingBugFree' && (isCodingDone || (codingTask?.status === 'done' && codingTask?.checkSonar !== false))) {
+      return complete();
     }
-    if (t.key === 'codingUnitTestCoverageAtLeast') {
-      if (isCodingDone || codingTask?.status === 'done') {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingUnitTestCoverageAtLeast' && (isCodingDone || codingTask?.status === 'done')) {
+      return complete();
     }
-    if (t.key === 'codingCompleteRefactorBy') {
-      if (isCodingDone || refactorTask?.status === 'done') {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingCompleteRefactorBy' && (isCodingDone || refactorTask?.status === 'done')) {
+      return complete();
     }
-    if (t.key === 'codingSonarQubeRefactorBugFree') {
-      if (isCodingDone || (refactorTask?.status === 'done' && refactorTask?.checkSonar !== false)) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'codingSonarQubeRefactorBugFree' && (isCodingDone || (refactorTask?.status === 'done' && refactorTask?.checkSonar !== false))) {
+      return complete();
     }
 
     // Onboarding achievements
-    if (t.key === 'startOnboardingBy') {
-      if (hf.onboardingFirstXmlUploadedDate || onboardingTask?.status === 'done' || isOnboardingDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'startOnboardingBy' && (hf.onboardingFirstXmlUploadedDate || onboardingTask?.status === 'done' || isOnboardingDone)) {
+      return complete();
     }
-    if (t.key === 'completeOnboardingBy') {
-      if (onboardingTask?.status === 'done' || isOnboardingDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'completeOnboardingBy' && (onboardingTask?.status === 'done' || isOnboardingDone)) {
+      return complete();
     }
 
     // Registration achievements
-    if (t.key === 'registerByDate') {
-      if (isRegistrationDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
+    if (t.key === 'registerByDate' && isRegistrationDone) {
+      return complete();
     }
 
     // Testing achievements
     if (t.key === 'testingStartTestingBy' || t.key === 'testingCompleteTestingBy' || t.key === 'testingCorrectnessAndCompletenessAtLeast') {
-      if (isTestingDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
-      if (isCodingDone && t.status === 'upcoming') {
-        return { ...t, isCurrent: true };
-      }
+      if (isTestingDone) return complete();
+      if (isCodingDone && t.status === 'upcoming') return { ...t, isCurrent: true };
     }
 
     // Review achievements
     if (t.key.startsWith('review')) {
-      if (isReviewDone) {
-        return { ...t, status: 'completed' as const, isCurrent: false };
-      }
-      if (isTestingDone && t.status === 'upcoming') {
-        return { ...t, isCurrent: true };
-      }
+      if (isReviewDone) return complete();
+      if (isTestingDone && t.status === 'upcoming') return { ...t, isCurrent: true };
     }
 
     return t;
   });
 
-  // 4. Recalculate XP totals
-  let tracked = 0;
-  let mandatory = 0;
-  let maxReachable = 0;
-
-  for (const t of updatedTasks) {
-    if (t.status === 'completed') {
-      tracked += t.xp;
-      if (t.type === 'mandatory') {
-        mandatory += t.xp;
-      }
-    }
-    if (t.status !== 'missed') {
-      maxReachable += t.xp;
-    }
-  }
-
-  // 5. Recalculate Level Progression
+  // 4. Recalculate XP totals, Level Progression, and Exam points
   const levels: Level[] = model.levels || defaultRules.levels;
-  const levelInfo = levelProgress(levels, tracked);
-
-  // 6. Recalculate Exam points
-  const exam = examPointsAt(levels, levelInfo.level);
-  const carried = examPointsAt(levels, levelProgress(levels, mandatory).level);
-
-  const hfUpdatedDate = new Date(hf.fetchedAt || Date.now());
-  const formattedHfDate = `${hfUpdatedDate.getFullYear()}. ${String(hfUpdatedDate.getMonth() + 1).padStart(2, '0')}. ${String(hfUpdatedDate.getDate()).padStart(2, '0')}. ${String(hfUpdatedDate.getHours()).padStart(2, '0')}:${String(hfUpdatedDate.getMinutes()).padStart(2, '0')}`;
+  const { xp, level, points } = computeStatsFromTasks(updatedTasks, levels);
 
   return {
     ...model,
     homeAssignment: updatedHome,
     tasks: updatedTasks,
-    xp: { tracked, mandatory, maxReachable },
+    xp,
     level: {
       ...model.level,
-      level: levelInfo.level,
-      currentXp: levelInfo.currentXp,
-      needed: levelInfo.needed,
-      remaining: levelInfo.remaining,
-      percent: levelInfo.percent,
-      rarityPct: levels[levelInfo.level - 1]?.rarityPct || model.level.rarityPct,
+      ...level,
+      rarityPct: level.rarityPct ?? model.level.rarityPct,
     },
     points: {
       ...model.points,
-      exam,
-      midterm: carried,
-      bonus: exam - carried,
-      carried,
+      ...points,
     },
-    hfLastUpdated: formattedHfDate,
+    hfLastUpdated: fmtTimestamp(hf.fetchedAt || Date.now()),
   };
 }

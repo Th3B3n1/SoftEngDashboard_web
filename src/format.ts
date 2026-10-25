@@ -58,6 +58,12 @@ export const fmtDateTime = (ms: number | string | Date, lang: 'hu' | 'en' = 'hu'
   return (lang === 'hu' ? dateTimeFmtHu : dateTimeFmtEn).format(d);
 };
 
+export function fmtTimestamp(ms: number): string {
+  const d = new Date(ms);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}. ${pad(d.getMonth() + 1)}. ${pad(d.getDate())}. ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export function relDays(target: number | string | Date, now = Date.now(), lang: 'hu' | 'en' = 'hu'): string {
   const targetMs = typeof target === 'number' ? target : new Date(target).getTime();
   const d = Math.ceil((targetMs - now) / 86_400_000);
@@ -126,6 +132,25 @@ export function getRarityTier(rarityPct: number | null | undefined): string {
   return 'ubiquitous';
 }
 
+export function getRarityInfo(rarityPct: number | null | undefined, lang: 'hu' | 'en' = 'hu', fallbackKey = 'common') {
+  const dict = lang === 'en' ? RARITY_INFO_EN : RARITY_INFO;
+  const tier = getRarityTier(rarityPct);
+  return dict[tier] || dict[fallbackKey] || RARITY_INFO.common;
+}
+
+export function getResultColor(result: LabResult): string {
+  switch (result) {
+    case 'completed':
+      return 'rgb(47, 158, 68)';
+    case 'at_risk':
+      return 'rgb(224, 49, 49)';
+    case 'failed':
+      return 'rgb(122, 31, 31)';
+    default:
+      return 'rgb(134, 142, 150)';
+  }
+}
+
 export const LAB_RESULT: Record<LabResult, { label: string; color: string }> = {
   completed: { label: 'Teljesítve', color: 'rgb(47, 158, 68)' },
   upcoming: { label: 'Közelgő', color: 'rgb(134, 142, 150)' },
@@ -164,7 +189,6 @@ export function getTaskInfo(key: string, fallbackGroup = '', lang: 'hu' | 'en' =
   if (dict[key]) {
     return dict[key];
   }
-  // Humanize key as fallback
   const title = key
     .replace(/([A-Z])/g, ' $1')
     .replace(/^./, (c) => c.toUpperCase())

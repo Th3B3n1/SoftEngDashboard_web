@@ -28,6 +28,7 @@ export interface TaskRule {
   examOnly: boolean;
   /** 'YYYY-MM-DD' or [start, end] */
   due: string | [string, string];
+  availableFrom?: string;
   source: TaskSource;
 }
 export interface Rules {
@@ -99,7 +100,7 @@ export interface TaskModel extends TaskRule {
   completedAt?: number;
   rarityPct?: number;
   lockStatus?: 'locked' | 'unlocked';
-  unlockConditions?: any[];
+  unlockConditions?: unknown[];
   isCurrent?: boolean;
 }
 
@@ -139,4 +140,3 @@ export interface DashboardModel {
   gradeInfo?: { pointsCollectableOnTheExam: number; examPassThreshold: number; gradeThresholds: number[] };
   levels?: Level[];
 }
-

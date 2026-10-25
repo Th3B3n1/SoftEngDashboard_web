@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../contexts/DashboardContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { RARITY_INFO, RARITY_INFO_EN, getRarityTier } from '../format';
+import { getRarityInfo } from '../format';
 import { rules } from '../engine/engine';
+import type { Level, Reward } from '../engine/types';
 
 export function LevelsPage() {
   const { model: m } = useDashboard();
@@ -12,9 +13,7 @@ export function LevelsPage() {
   const [showEarlierLevels, setShowEarlierLevels] = useState(false);
 
   const levelNum = m.level.level;
-  const rarityTier = getRarityTier(m.level.rarityPct);
-  const rarityDict = lang === 'en' ? RARITY_INFO_EN : RARITY_INFO;
-  const rarityInfo = rarityDict[rarityTier] || rarityDict.rare;
+  const rarityInfo = getRarityInfo(m.level.rarityPct, lang, 'rare');
 
   const allLevels = m.levels || rules.levels;
 
@@ -194,7 +193,7 @@ export function LevelsPage() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {allLevels.map((lvlData: any, idx: number) => {
+          {allLevels.map((lvlData: Level, idx: number) => {
             const currentIdx = idx + 1;
             const isUnlocked = currentIdx <= levelNum;
             const isCurrent = currentIdx === levelNum;
@@ -203,13 +202,12 @@ export function LevelsPage() {
               return null;
             }
 
-            const rarity = getRarityTier(lvlData.rarityPct);
-            const rInfo = rarityDict[rarity] || rarityDict.common;
-            const rewards = (lvlData.levelRewards || []).map((r: any) =>
+            const rInfo = getRarityInfo(lvlData.rarityPct, lang, 'common');
+            const rewards = (lvlData.levelRewards || []).map((r: Reward) =>
               r.type === 'exam_point'
-                ? t('examPointsBadge', { amount: r.amount })
+                ? t('examPointsBadge', { amount: r.amount ?? 0 })
                 : r.type === 'imsc_point'
-                ? t('imscPointsBadge', { amount: r.amount })
+                ? t('imscPointsBadge', { amount: r.amount ?? 0 })
                 : t('offeredGrade')
             ).join(', ');
 

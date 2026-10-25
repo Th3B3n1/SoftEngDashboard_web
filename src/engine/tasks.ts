@@ -26,7 +26,7 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
   const recap = snap.quizzes.filter((q) => /^Ellenőrző kvíz/i.test(q.name)).sort(byOrder);
   const lectureDone = snap.quizzes.filter((q) => /^Előadás kvíz/i.test(q.name) && done(q)).length;
 
-  // Precompute Moodle presence and active status for Labs 1..7 to avoid repeated RegExp allocations and array scans
+  // Precompute Moodle presence and active status for Labs 1..7
   const labCount = labs.labs.length;
   const labPresence = new Array<boolean>(labCount + 1).fill(false);
   const labCurrent = new Array<boolean>(labCount + 1).fill(false);
@@ -67,14 +67,12 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
   return rules.tasks.map((r: TaskRule): TaskModel => {
     const dues = Array.isArray(r.due) ? r.due : [r.due, r.due];
     const dueAt = endOfDay(dues[1]);
-    
-    // Configurable start date: from (r as any).availableFrom or r.due[0]
+
     let dueStartAt = Array.isArray(r.due) ? startOfDay(dues[0]) : 0;
-    if ((r as any).availableFrom) {
-      dueStartAt = new Date((r as any).availableFrom).getTime();
+    if (r.availableFrom) {
+      dueStartAt = new Date(r.availableFrom).getTime();
     }
-    
-    // For homework tasks, check phase availableFrom in rules.homeAssignment
+
     if (r.group === 'homeAssignment' && r.sub && rules.homeAssignment?.phases?.[r.sub]) {
       const p = rules.homeAssignment.phases[r.sub];
       if (p?.availableFrom) {
@@ -101,7 +99,6 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
           isCurrent = true;
         } else if (lab.result === 'upcoming') {
           status = overdue ? 'missed' : 'upcoming';
-          // Only current if lab has presence in Moodle and window is reached
           isCurrent = !overdue && isLabCurrent(labNum);
         } else {
           status = 'missed';
@@ -113,7 +110,6 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
         status = excellent >= spec.n ? 'completed' : excellent + open >= spec.n ? 'upcoming' : 'missed';
 
         if (status === 'upcoming') {
-          // Check how many labs in scope have presence in Moodle or are completed
           const readyOrDone = spec.scope.filter((n) => labs.labs[n - 1]?.finalGrade === 'excellent' || labHasMoodle(n)).length;
           const hasActiveLab = spec.scope.some((n) => isLabCurrent(n));
           isCurrent = readyOrDone >= spec.n && hasActiveLab && !overdue;
@@ -130,11 +126,10 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
       }
 
       if (status === 'upcoming') {
-        // Must exist in Moodle, must be open in Moodle, and start date reached
         const existsInMoodle = !!q;
         const moodleOpen = q && (!q.timeOpen || q.timeOpen * 1000 <= now);
         const startReached = !dueStartAt || now >= dueStartAt;
-        isCurrent = existsInMoodle && moodleOpen && startReached && !overdue;
+        isCurrent = Boolean(existsInMoodle && moodleOpen && startReached && !overdue);
       }
     } else if (r.source === 'lectureQuiz') {
       const need = Number(r.key.replace('lectureQuiz', ''));

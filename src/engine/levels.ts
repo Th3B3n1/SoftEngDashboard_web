@@ -1,4 +1,4 @@
-import { GRADE_KEYS, type GradeKey, type Level, type Rules } from './types';
+import { GRADE_KEYS, type GradeKey, type Level, type Rules, type TaskModel } from './types';
 
 /** Total XP needed to *reach* level L (level 1 = 0). */
 export const cumXp = (levels: Level[], L: number) =>
@@ -21,6 +21,7 @@ export function levelProgress(levels: Level[], xp: number) {
     needed,
     remaining: Math.max(needed - currentXp, 0),
     percent: isMax ? 100 : Math.min(100, Math.round((currentXp / needed) * 100)),
+    rarityPct: levels[level - 1]?.rarityPct,
   };
 }
 
@@ -33,6 +34,36 @@ const rewardSum = (levels: Level[], level: number, type: 'exam_point' | 'imsc_po
 
 export const examPointsAt = (levels: Level[], level: number, extra = 0) => rewardSum(levels, level, 'exam_point') + extra;
 export const imscPointsAt = (levels: Level[], level: number) => rewardSum(levels, level, 'imsc_point');
+
+/** Computes XP totals, level progress, and exam/IMSc/carryover points from evaluated tasks. */
+export function computeStatsFromTasks(tasks: TaskModel[], levels: Level[]) {
+  let tracked = 0;
+  let mandatory = 0;
+  let maxReachable = 0;
+
+  for (const t of tasks) {
+    if (t.status === 'completed') {
+      tracked += t.xp;
+      if (t.type === 'mandatory') {
+        mandatory += t.xp;
+      }
+    }
+    if (t.status !== 'missed') {
+      maxReachable += t.xp;
+    }
+  }
+
+  const level = levelProgress(levels, tracked);
+  const exam = examPointsAt(levels, level.level);
+  const carried = examPointsAt(levels, levelProgress(levels, mandatory).level);
+  const imsc = imscPointsAt(levels, level.level);
+
+  return {
+    xp: { tracked, mandatory, maxReachable },
+    level,
+    points: { exam, imsc, midterm: carried, bonus: exam - carried, carried },
+  };
+}
 
 /** Grade reached with the points of `level` and *no* exam points yet is meaningless; this is the pre-exam standing. */
 export function gradeFor(rules: Rules, level: number): GradeKey {
@@ -80,9 +111,8 @@ export function proposedGrade(levels: Level[], level: number): number | null {
 /** Next level that actually carries a reward (the dashboard's "next milestone"). */
 export function nextRewardLevel(levels: Level[], level: number): number {
   for (let r = level + 1; r <= levels.length; r++) {
-    const len = (levels[r - 1]?.rewards?.length ?? levels[r - 1]?.levelRewards?.length ?? 0);
+    const len = levels[r - 1]?.rewards?.length ?? levels[r - 1]?.levelRewards?.length ?? 0;
     if (len > 0) return r;
   }
   return Math.min(level + 1, levels.length);
 }
-

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../contexts/DashboardContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { getTaskInfo, RARITY_INFO, RARITY_INFO_EN, getRarityTier } from '../format';
+import { getTaskInfo, getRarityInfo, getResultColor, GRADE_DOT_COLOR } from '../format';
 import { rules } from '../engine/engine';
 import { forecast, proposedGrade } from '../engine/levels';
 
@@ -20,7 +20,7 @@ export function OverviewPage() {
     ? Object.entries(m.homeAssignment.phases)
     : [];
 
-  const passedHwCount = hwPhases.filter(([, p]: any) => p.result === 'completed').length;
+  const passedHwCount = hwPhases.filter(([, p]) => p.result === 'completed').length;
   const totalHwCount = hwPhases.length;
 
   // Tokens
@@ -29,7 +29,7 @@ export function OverviewPage() {
 
   // Upcoming items for signature (next upcoming lab + next upcoming homework phase)
   const nextLab = labs.find((l) => l.result === 'upcoming');
-  const nextHwPhase = hwPhases.map(([, p]: any) => p).find((p: any) => p.result === 'upcoming');
+  const nextHwPhase = hwPhases.map(([, p]) => p).find((p) => p.result === 'upcoming');
 
   const upcomingSignatureItems: { title: string; due: string }[] = [];
   if (nextLab && nextLab.original.date) {
@@ -48,8 +48,7 @@ export function OverviewPage() {
 
   // Performance / Level
   const levelNum = m.level.level;
-  const rarityTier = getRarityTier(m.level.rarityPct);
-  const rarityInfo = (lang === 'en' ? RARITY_INFO_EN : RARITY_INFO)[rarityTier] || RARITY_INFO.rare;
+  const rarityInfo = getRarityInfo(m.level.rarityPct, lang, 'rare');
 
   // Available tasks (top 4 uncompleted and fulfillable tasks that are currently active)
   const availableToCompleteTasks = m.tasks
@@ -116,11 +115,11 @@ export function OverviewPage() {
   };
 
   const gradeRows = [
-    { name: `1 (${t('failGrade')})`, dotColor: 'rgb(224, 49, 49)', cur: getCellContent(0, curForecast, curProposed), next: getCellContent(0, nextForecast, nextProposed) },
-    { name: `2 (${t('passGrade')})`, dotColor: 'rgb(253, 126, 20)', cur: getCellContent(1, curForecast, curProposed), next: getCellContent(1, nextForecast, nextProposed) },
-    { name: `3 (${t('satisfactoryGrade')})`, dotColor: 'rgb(252, 196, 25)', cur: getCellContent(2, curForecast, curProposed), next: getCellContent(2, nextForecast, nextProposed) },
-    { name: `4 (${t('goodGrade')})`, dotColor: 'rgb(32, 201, 151)', cur: getCellContent(3, curForecast, curProposed), next: getCellContent(3, nextForecast, nextProposed) },
-    { name: `5 (${t('excellentGrade')})`, dotColor: 'rgb(81, 207, 102)', cur: getCellContent(4, curForecast, curProposed), next: getCellContent(4, nextForecast, nextProposed) },
+    { name: `1 (${t('failGrade')})`, dotColor: GRADE_DOT_COLOR.fail, cur: getCellContent(0, curForecast, curProposed), next: getCellContent(0, nextForecast, nextProposed) },
+    { name: `2 (${t('passGrade')})`, dotColor: GRADE_DOT_COLOR.pass, cur: getCellContent(1, curForecast, curProposed), next: getCellContent(1, nextForecast, nextProposed) },
+    { name: `3 (${t('satisfactoryGrade')})`, dotColor: GRADE_DOT_COLOR.satisfactory, cur: getCellContent(2, curForecast, curProposed), next: getCellContent(2, nextForecast, nextProposed) },
+    { name: `4 (${t('goodGrade')})`, dotColor: GRADE_DOT_COLOR.good, cur: getCellContent(3, curForecast, curProposed), next: getCellContent(3, nextForecast, nextProposed) },
+    { name: `5 (${t('excellentGrade')})`, dotColor: GRADE_DOT_COLOR.excellent, cur: getCellContent(4, curForecast, curProposed), next: getCellContent(4, nextForecast, nextProposed) },
   ];
 
 
@@ -195,20 +194,14 @@ export function OverviewPage() {
                 <span className="segmented-count">{passedLabsCount}/{totalLabsCount} {t('completed')}</span>
               </div>
               <div className="segmented-bar">
-                {labs.map((l) => {
-                  let bg = 'rgb(134, 142, 150)';
-                  if (l.result === 'completed') bg = 'rgb(47, 158, 68)';
-                  else if (l.result === 'at_risk') bg = 'rgb(224, 49, 49)';
-                  else if (l.result === 'failed') bg = 'rgb(122, 31, 31)';
-                  return (
-                    <div
-                      key={l.n}
-                      className="bar-segment"
-                      title={`LAB${l.n}: ${l.title || ''}`}
-                      style={{ background: bg }}
-                    />
-                  );
-                })}
+                {labs.map((l) => (
+                  <div
+                    key={l.n}
+                    className="bar-segment"
+                    title={`LAB${l.n}: ${l.title || ''}`}
+                    style={{ background: getResultColor(l.result) }}
+                  />
+                ))}
               </div>
             </div>
 
@@ -219,20 +212,14 @@ export function OverviewPage() {
                 <span className="segmented-count">{passedHwCount}/{totalHwCount} {t('completed')}</span>
               </div>
               <div className="segmented-bar">
-                {hwPhases.map(([key, p]: any) => {
-                  let bg = 'rgb(134, 142, 150)';
-                  if (p.result === 'completed') bg = 'rgb(47, 158, 68)';
-                  else if (p.result === 'at_risk') bg = 'rgb(224, 49, 49)';
-                  else if (p.result === 'failed') bg = 'rgb(122, 31, 31)';
-                  return (
-                    <div
-                      key={key}
-                      className="bar-segment"
-                      title={key}
-                      style={{ background: bg }}
-                    />
-                  );
-                })}
+                {hwPhases.map(([key, p]) => (
+                  <div
+                    key={key}
+                    className="bar-segment"
+                    title={key}
+                    style={{ background: getResultColor(p.result) }}
+                  />
+                ))}
               </div>
             </div>
           </div>

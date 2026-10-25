@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../contexts/DashboardContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { getTaskInfo, RARITY_INFO, RARITY_INFO_EN, getRarityTier } from '../format';
+import { getTaskInfo, getRarityInfo } from '../format';
 import type { TaskModel } from '../engine/types';
 
 interface GroupProgress {
@@ -152,8 +152,7 @@ export function TasksPage() {
     const dueLabel = tItem.dueAt > 0 ? `${t('due')}: ${formatDate(tItem.dueAt)} (${formatRelDays(tItem.dueAt)})` : null;
 
     // Rarity tier
-    const rarityTier = getRarityTier(tItem.rarityPct);
-    const rInfo = (lang === 'en' ? RARITY_INFO_EN : RARITY_INFO)[rarityTier] || (lang === 'en' ? RARITY_INFO_EN.common : RARITY_INFO.common);
+    const rInfo = getRarityInfo(tItem.rarityPct, lang, 'common');
 
     return (
       <div key={tItem.key} className="task-row-official">

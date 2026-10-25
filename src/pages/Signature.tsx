@@ -30,7 +30,7 @@ export function SignaturePage() {
 
   // Homework phases
   const hwPhases = m.homeAssignment?.phases
-    ? Object.entries(m.homeAssignment.phases).map(([key, val]: [string, any], idx) => ({
+    ? Object.entries(m.homeAssignment.phases).map(([key, val], idx) => ({
         key,
         index: idx,
         name: getPhaseName(key, val.name || key),
@@ -39,6 +39,7 @@ export function SignaturePage() {
         dueDate: val.dueDate,
         lateSubmissionDate: val.lateSubmissionDate,
         completedOn: val.completedOn,
+        lateSubmissionFeeCharged: val.lateSubmissionFeeCharged,
       }))
     : [];
 
@@ -47,7 +48,7 @@ export function SignaturePage() {
 
   const tokensTotal = m.labs.tokensTotal || 2;
   const tokensLeft = m.labs.tokensLeft ?? 1;
-  const feeCount = hwPhases.filter((p) => (p as any).lateSubmissionFeeCharged).length;
+  const feeCount = hwPhases.filter((p) => p.lateSubmissionFeeCharged).length;
 
   const nextUpcomingLab = labs.find((l) => l.result === 'upcoming' || l.result === 'at_risk');
   const nextUpcomingHw = hwPhases.find((p) => p.result === 'upcoming' || p.result === 'at_risk');
@@ -184,7 +185,7 @@ export function SignaturePage() {
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px 9px' }}>
                 <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'rgb(247, 103, 7)', flexShrink: 0 }} />
                 <span style={{ fontSize: '13.5px', color: 'rgb(233, 236, 239)', flex: '1 1 160px' }}>
-                  LAB{nextUpcomingLab.n}: {nextUpcomingLab.title || (rules.labs as any).titles?.[String(nextUpcomingLab.n)] || `Labor ${nextUpcomingLab.n}`}
+                  LAB{nextUpcomingLab.n}: {nextUpcomingLab.title || rules.labs.titles?.[String(nextUpcomingLab.n)] || `Labor ${nextUpcomingLab.n}`}
                 </span>
                 <span style={{ fontSize: '12px', color: 'rgb(166, 167, 171)' }}>
                   {nextUpcomingLab.original.date ? `${t('time')}: ${formatLabDate(nextUpcomingLab.original.date)}` : t('soon')}
@@ -295,9 +296,9 @@ export function SignaturePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {filteredLabs.map((l) => {
               const isCompleted = l.result === 'completed';
-              const title = l.title || (rules.labs as any).titles?.[String(l.n)] || `Labor ${l.n}`;
+              const title = l.title || rules.labs.titles?.[String(l.n)] || `Labor ${l.n}`;
               const hasRetake = !!l.retake;
-              const defaultDate = (rules.labs as any).defaultDates?.[String(l.n)];
+              const defaultDate = rules.labs.defaultDates?.[String(l.n)];
               const dateStr = l.original.date
                 ? formatLabDate(l.original.date)
                 : defaultDate
