@@ -17,9 +17,35 @@ interface Trio {
   report?: AssignInfo;
 }
 
-function buildAttempt(kind: 'original' | 'retake', t: Trio, room: string | null, rules: Rules, now: number, defaultDateIso?: string): LabAttempt {
+function buildAttempt(
+  kind: 'original' | 'retake',
+  t: Trio,
+  room: string | null,
+  rules: Rules,
+  now: number,
+  defaultDateIso?: string,
+  laterLabExists = false,
+): LabAttempt {
   const parsedDefault = defaultDateIso ? new Date(defaultDateIso).getTime() : null;
   const date = labStart(t.entry) ?? parsedDefault;
+  const hasMoodleActivities = Boolean(t.entry || t.exit || t.report);
+
+  // If a lab has no beugró, kiugró, or jegyzőkönyv for this student (e.g. due to a public holiday)
+  // and either its scheduled date has passed or a subsequent lab is already active in Moodle,
+  // the student automatically receives a "Megfelelt" ('pass') grade without needing a retake.
+  if (kind === 'original' && !hasMoodleActivities && (laterLabExists || (date !== null && now >= date))) {
+    return {
+      kind,
+      date,
+      room,
+      status: 'attended',
+      entryPassed: null,
+      exitMet: null,
+      report: 'none',
+      grade: 'pass',
+    };
+  }
+
   const entryAttempted = (t.entry?.attempts ?? 0) > 0;
   const status: LabAttempt['status'] =
     date === null || now < date ? 'upcoming' : entryAttempted || (t.exit?.attempts ?? 0) > 0 ? 'attended' : 'absent';
@@ -77,24 +103,37 @@ export function computeLabs(snap: MoodleSnapshot, rules: Rules, now: number): La
     .sort((a, b) => (a.attempt.date ?? 0) - (b.attempt.date ?? 0));
 
   // ---- originals ----
-  const originals = Array.from({ length: rules.labs.count }, (_, i) => i + 1).map((n) =>
-    buildAttempt(
+  const labTrios: Trio[] = Array.from({ length: rules.labs.count }, (_, i) => {
+    const n = i + 1;
+    return { entry: labQuiz(n, 'beugró'), exit: labQuiz(n, 'kiugró'), report: labReport(n) };
+  });
+
+  const originals = labTrios.map((trio, i) => {
+    const n = i + 1;
+    const laterLabExists = labTrios.slice(i + 1).some((later) => Boolean(later.entry || later.exit || later.report));
+    return buildAttempt(
       'original',
-      { entry: labQuiz(n, 'beugró'), exit: labQuiz(n, 'kiugró'), report: labReport(n) },
+      trio,
       labRoom(n),
       rules,
       now,
       rules.labs.defaultDates?.[String(n)],
-    ),
-  );
+      laterLabExists,
+    );
+  });
 
-  // ---- assign retakes to the earliest failed lab that happened before them ----
+  // ---- assign retakes to the earliest failed lab that happened before them (or 'pass' lab for grade improvement) ----
   const retakeFor = new Map<number, LabAttempt>();
   for (const b of bundles) {
     if (!b.booked) continue;
-    const idx = originals.findIndex(
+    let idx = originals.findIndex(
       (o, i) => !retakeFor.has(i + 1) && (o.grade === 'fail' || o.status === 'absent') && (o.date ?? Infinity) <= (b.attempt.date ?? Infinity),
     );
+    if (idx < 0) {
+      idx = originals.findIndex(
+        (o, i) => !retakeFor.has(i + 1) && o.grade === 'pass' && (o.date ?? Infinity) <= (b.attempt.date ?? Infinity),
+      );
+    }
     if (idx >= 0) retakeFor.set(idx + 1, b.attempt);
   }
 

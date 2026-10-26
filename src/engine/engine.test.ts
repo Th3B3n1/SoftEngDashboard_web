@@ -152,5 +152,42 @@ describe('evaluateTasks availability (isCurrent)', () => {
     const testingTask = evaluated.find((t) => t.key === 'testingStartTestingBy');
     expect(testingTask?.isCurrent).toBe(false);
   });
+
+  it('grants automatic pass (Megfelelt) without retake when a lab has no quizzes/report due to a public holiday', async () => {
+    const { evaluateTasks } = await import('./tasks');
+    const { computeLabs } = await import('./labs');
+
+    // Lab 1 was skipped for this user due to a public holiday; Lab 2 is present and completed with excellent
+    const mockNow = new Date('2026-10-05T14:00:00').getTime();
+    const mockSnap = {
+      user: { id: 1, fullName: 'Test' },
+      fetchedAt: mockNow,
+      quizzes: [
+        { cmid: 201, course: 1, name: 'LAB2: beugró', timeOpen: 1790000000, timeClose: 0, attempts: 1, bestGrade: 5, completionState: 1, timeCompleted: 1790001000 },
+        { cmid: 202, course: 1, name: 'LAB2: kiugró', timeOpen: 1790000000, timeClose: 0, attempts: 1, bestGrade: 5, completionState: 1, timeCompleted: 1790002000 },
+      ],
+      assignments: [
+        { cmid: 203, name: 'LAB2: jegyzőkönyv', dueDate: 0, gradingDueDate: 0, submissionStatus: 'submitted', gradingStatus: 'graded', gradeText: 'kiválóan megfelelt' },
+      ],
+      groups: [],
+    };
+
+    const labsModel = computeLabs(mockSnap as any, rules, mockNow);
+    const evaluated = evaluateTasks(mockSnap as any, rules, labsModel, mockNow);
+
+    const lab1 = labsModel.labs[0];
+    expect(lab1.n).toBe(1);
+    expect(lab1.finalGrade).toBe('pass');
+    expect(lab1.result).toBe('completed');
+
+    // Lab 2 is excellent, Lab 1 is pass -> passedCount = 2, excellentCount = 1, signature = on_track
+    expect(labsModel.passedCount).toBe(2);
+    expect(labsModel.excellentCount).toBe(1);
+    expect(labsModel.signature).toBe('on_track');
+
+    // Lab 1 Excellent XP task is NOT awarded since it is only "Megfelelt" ('pass'), not "Kiválóan megfelelt"
+    const lab1Task = evaluated.find((t) => t.key === 'lab1Excellent');
+    expect(lab1Task?.status).toBe('missed');
+  });
 });
 

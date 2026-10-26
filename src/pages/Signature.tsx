@@ -369,9 +369,9 @@ export function SignaturePage() {
                     {/* Room pill or hint */}
                     {room ? (
                       <span className="room-pill">{room}</span>
-                    ) : (
+                    ) : !isCompleted ? (
                       <span className="room-hidden-text">{t('registerForRoom')}</span>
-                    )}
+                    ) : null}
                   </div>
 
                   {/* Retake subbox if present */}
