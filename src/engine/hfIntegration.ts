@@ -86,7 +86,13 @@ export function applyHfDataToModel(model: DashboardModel, hf: HfStatus): Dashboa
 
   // 3. Update tasks status
   const updatedTasks: TaskModel[] = model.tasks.map((t) => {
-    const complete = (): TaskModel => ({ ...t, status: 'completed', isCurrent: false });
+    const complete = (): TaskModel => ({
+      ...t,
+      status: 'completed',
+      baseStatus: 'completed',
+      isCurrent: false,
+      baseIsCurrent: false,
+    });
 
     // Coding achievements
     if (t.key === 'codingStartCodingBy' && (codingTask?.askedForEvaluationDate || codingTask?.status === 'done' || isCodingDone)) {
@@ -127,26 +133,26 @@ export function applyHfDataToModel(model: DashboardModel, hf: HfStatus): Dashboa
     // Testing achievements
     if (t.key === 'testingStartTestingBy' || t.key === 'testingCompleteTestingBy' || t.key === 'testingCorrectnessAndCompletenessAtLeast') {
       if (isTestingDone) return complete();
-      if (isCodingDone && t.status === 'upcoming') return { ...t, isCurrent: true };
+      if (isCodingDone && t.status === 'upcoming') return { ...t, isCurrent: true, baseIsCurrent: true };
     }
 
     // Review achievements
     if (t.key.startsWith('review')) {
       if (isReviewDone) return complete();
-      if (isTestingDone && t.status === 'upcoming') return { ...t, isCurrent: true };
+      if (isTestingDone && t.status === 'upcoming') return { ...t, isCurrent: true, baseIsCurrent: true };
     }
 
     return t;
   });
 
-  // 4. Recalculate XP totals, Level Progression, and Exam points
+  // 4. Recalculate XP totals, Level Progression, Unlock Conditions, and Exam points
   const levels: Level[] = model.levels || defaultRules.levels;
-  const { xp, level, points } = computeStatsFromTasks(updatedTasks, levels);
+  const { tasks: resolvedTasks, xp, level, points } = computeStatsFromTasks(updatedTasks, levels);
 
   return {
     ...model,
     homeAssignment: updatedHome,
-    tasks: updatedTasks,
+    tasks: resolvedTasks,
     xp,
     level: {
       ...model.level,

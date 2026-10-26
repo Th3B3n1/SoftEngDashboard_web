@@ -96,30 +96,73 @@ export const GRADE_LABEL_EN: Record<GradeKey, string> = {
   excellent: 'Excellent (5)',
 };
 
+export function hexToRgb(hex: string): [number, number, number] {
+  const v = parseInt(hex.slice(1), 16);
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+}
+
+export function mixHex(hexA: string, hexB: string, ratio: number): string {
+  const a = hexToRgb(hexA);
+  const b = hexToRgb(hexB);
+  return (
+    '#' +
+    a
+      .map((c, idx) => c + (b[idx] - c) * ratio)
+      .map((c) => Math.round(Math.max(0, Math.min(255, c))).toString(16).padStart(2, '0'))
+      .join('')
+  );
+}
+
+export function hexAlpha(hex: string, alpha: number): string {
+  return `rgba(${hexToRgb(hex).join(',')},${alpha})`;
+}
+
+export function getLevelColor(level: number, totalLevels = 22) {
+  const r = totalLevels > 1 ? Math.max(0, Math.min(1, (level - 1) / (totalLevels - 1))) : 0;
+  const light = mixHex('#4dabf7', '#e599f7', r);
+  const solid = mixHex('#1c7ed6', '#9c36b5', r);
+  return {
+    gradient: `linear-gradient(135deg, ${light}, ${solid})`,
+    barGradient: `linear-gradient(90deg, ${light}, ${solid})`,
+    shadow: hexAlpha(solid, 0.35),
+    solid,
+  };
+}
+
 export const GRADE_DOT_COLOR: Record<GradeKey, string> = {
-  fail: 'rgb(224, 49, 49)',
-  pass: 'rgb(253, 126, 20)',
-  satisfactory: 'rgb(252, 196, 25)',
-  good: 'rgb(32, 201, 151)',
-  excellent: 'rgb(81, 207, 102)',
+  fail: '#e03131',
+  pass: '#868e96',
+  satisfactory: '#1c7ed6',
+  good: '#0c8599',
+  excellent: '#2f9e44',
 };
 
+const RARITY_TIERS = ['ubiquitous', 'common', 'uncommon', 'rare', 'epic', 'legendary'] as const;
+const RARITY_COLORS: Record<string, { color: string; bg: string }> = RARITY_TIERS.reduce(
+  (acc, tier, idx) => {
+    const color = mixHex('#1c7ed6', '#f5c518', idx / (RARITY_TIERS.length - 1));
+    acc[tier] = { color, bg: mixHex(color, '#ffffff', 0.85) };
+    return acc;
+  },
+  {} as Record<string, { color: string; bg: string }>
+);
+
 export const RARITY_INFO: Record<string, { label: string; color: string; bg: string }> = {
-  ubiquitous: { label: 'Mindennapos', color: 'rgb(134, 142, 150)', bg: 'rgba(134, 142, 150, 0.15)' },
-  common: { label: 'Gyakori', color: 'rgb(28, 126, 214)', bg: 'rgba(28, 126, 214, 0.15)' },
-  uncommon: { label: 'Szokatlan', color: 'rgb(32, 201, 151)', bg: 'rgba(32, 201, 151, 0.15)' },
-  rare: { label: 'Ritka', color: 'rgb(158, 169, 100)', bg: 'rgba(158, 169, 100, 0.25)' },
-  epic: { label: 'Epikus', color: 'rgb(174, 62, 201)', bg: 'rgba(174, 62, 201, 0.15)' },
-  legendary: { label: 'Legendás', color: 'rgb(245, 159, 0)', bg: 'rgba(245, 159, 0, 0.15)' },
+  ubiquitous: { label: 'Mindennapos', ...RARITY_COLORS.ubiquitous },
+  common: { label: 'Gyakori', ...RARITY_COLORS.common },
+  uncommon: { label: 'Szokatlan', ...RARITY_COLORS.uncommon },
+  rare: { label: 'Ritka', ...RARITY_COLORS.rare },
+  epic: { label: 'Epikus', ...RARITY_COLORS.epic },
+  legendary: { label: 'Legendás', ...RARITY_COLORS.legendary },
 };
 
 export const RARITY_INFO_EN: Record<string, { label: string; color: string; bg: string }> = {
-  ubiquitous: { label: 'Everyday', color: 'rgb(134, 142, 150)', bg: 'rgba(134, 142, 150, 0.15)' },
-  common: { label: 'Common', color: 'rgb(28, 126, 214)', bg: 'rgba(28, 126, 214, 0.15)' },
-  uncommon: { label: 'Uncommon', color: 'rgb(32, 201, 151)', bg: 'rgba(32, 201, 151, 0.15)' },
-  rare: { label: 'Rare', color: 'rgb(158, 169, 100)', bg: 'rgba(158, 169, 100, 0.25)' },
-  epic: { label: 'Epic', color: 'rgb(174, 62, 201)', bg: 'rgba(174, 62, 201, 0.15)' },
-  legendary: { label: 'Legendary', color: 'rgb(245, 159, 0)', bg: 'rgba(245, 159, 0, 0.15)' },
+  ubiquitous: { label: 'Ubiquitous', ...RARITY_COLORS.ubiquitous },
+  common: { label: 'Common', ...RARITY_COLORS.common },
+  uncommon: { label: 'Uncommon', ...RARITY_COLORS.uncommon },
+  rare: { label: 'Rare', ...RARITY_COLORS.rare },
+  epic: { label: 'Epic', ...RARITY_COLORS.epic },
+  legendary: { label: 'Legendary', ...RARITY_COLORS.legendary },
 };
 
 export function getRarityTier(rarityPct: number | null | undefined): string {

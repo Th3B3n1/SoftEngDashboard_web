@@ -1506,3 +1506,61 @@ body {
     padding-left: 50px;
   }
 }
+
+/* Levels Page 2-Column Layout */
+.levels-two-col-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+@media (max-width: 860px) {
+  .levels-two-col-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Grade Outlook Custom Range Slider */
+.gd-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 18px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.gd-slider::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 18px;
+}
+
+.gd-slider::-moz-range-track {
+  background: transparent;
+  height: 18px;
+}
+
+.gd-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--slider-thumb-border, #1c7ed6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  margin-top: 0;
+  cursor: grab;
+}
+
+.gd-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--slider-thumb-border, #1c7ed6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  cursor: grab;
+}
+

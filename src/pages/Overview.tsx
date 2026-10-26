@@ -59,7 +59,8 @@ export function OverviewPage() {
     const isHw = t.group === 'homeAssignment';
     const isLab = t.group === 'labs';
     const isRecap = t.group === 'recapQuizzes';
-    const typeLetter = isHw ? 'P' : isLab ? 'L' : isRecap ? 'E' : 'Q';
+    const isExtra = t.group === 'extraAssignments';
+    const typeLetter = isHw ? 'P' : isLab ? 'L' : isRecap ? 'E' : isExtra ? 'F' : 'Q';
     const typeClass = isHw ? 'task-type-p' : isLab ? 'task-type-l' : 'task-type-q';
     const category = isHw
       ? lang === 'en' ? 'Homework' : 'Házi feladat'
@@ -67,6 +68,8 @@ export function OverviewPage() {
       ? lang === 'en' ? 'Labs' : 'Laborok'
       : isRecap
       ? lang === 'en' ? 'Recap quiz' : 'Ellenőrző kvíz'
+      : isExtra
+      ? lang === 'en' ? 'Elective assignment' : 'Fakultatív feladat'
       : lang === 'en' ? 'Lecture quiz' : 'Előadás kvíz';
     const dueStr = Array.isArray(t.due) ? t.due[1] : t.due;
     return {
@@ -81,7 +84,7 @@ export function OverviewPage() {
   const remainingTasksCount = Math.max(0, availableToCompleteTasks.length - availableTasks.length);
 
   // Grade Outlook Calculations (synchronized with Grade page)
-  const maxLevel = rules.levels.length || 22;
+  const maxLevel = m.level.maxReachableLevel ?? (rules.levels.length || 22);
   const nextLevelNum = Math.min(maxLevel, levelNum + 1);
   const curForecast = forecast(rules, levelNum);
   const nextForecast = forecast(rules, nextLevelNum);

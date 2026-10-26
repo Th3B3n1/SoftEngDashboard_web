@@ -189,5 +189,81 @@ describe('evaluateTasks availability (isCurrent)', () => {
     const lab1Task = evaluated.find((t) => t.key === 'lab1Excellent');
     expect(lab1Task?.status).toBe('missed');
   });
+
+  it('evaluates unlockConditions on extraAssignments and marks task missed when a prerequisite is missed', async () => {
+    const { computeStatsFromTasks } = await import('./levels');
+
+    const tasks = [
+      {
+        key: 'lab2Excellent',
+        group: 'labs',
+        sub: 'devProcessLabs',
+        xp: 4,
+        type: 'mandatory' as const,
+        examOnly: false,
+        due: '2026-12-08',
+        source: 'labs' as const,
+        status: 'missed' as const,
+        dueAt: 0,
+        dueStartAt: 0,
+      },
+      {
+        key: 'lab3Excellent',
+        group: 'labs',
+        sub: 'devProcessLabs',
+        xp: 4,
+        type: 'mandatory' as const,
+        examOnly: false,
+        due: '2026-12-08',
+        source: 'labs' as const,
+        status: 'completed' as const,
+        dueAt: 0,
+        dueStartAt: 0,
+      },
+      {
+        key: 'min2UmlLabsExcellent',
+        group: 'labs',
+        sub: 'umlLabs',
+        xp: 20,
+        type: 'mandatory' as const,
+        examOnly: false,
+        due: '2026-12-08',
+        source: 'labs' as const,
+        status: 'upcoming' as const,
+        dueAt: 0,
+        dueStartAt: 0,
+      },
+      {
+        key: 'lemonTree',
+        group: 'extraAssignments',
+        sub: '',
+        xp: 50,
+        type: 'optional' as const,
+        examOnly: false,
+        due: '2026-12-01',
+        source: 'untracked:extra' as const,
+        status: 'upcoming' as const,
+        isCurrent: true,
+        dueAt: 0,
+        dueStartAt: 0,
+        unlockConditions: [
+          { type: 'another_task' as const, taskKey: 'lab2Excellent' },
+          { type: 'another_task' as const, taskKey: 'lab3Excellent' },
+          { type: 'another_task' as const, taskKey: 'min2UmlLabsExcellent' },
+        ],
+      },
+    ];
+
+    const res = computeStatsFromTasks(tasks, rules.levels);
+    const lemon = res.tasks.find((t) => t.key === 'lemonTree');
+
+    // Because lab2Excellent is missed, lemonTree becomes missed and not current, and its 50 XP is excluded from maxReachable
+    expect(lemon?.status).toBe('missed');
+    expect(lemon?.isCurrent).toBe(false);
+    expect(lemon?.lockStatus).toBe('locked');
+    expect(res.xp.maxReachable).toBe(24); // only lab3Excellent (4) + min2UmlLabsExcellent (20)
+    expect(res.level.maxReachableLevel).toBe(2);
+  });
 });
+
 

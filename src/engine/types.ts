@@ -19,6 +19,16 @@ export type TaskSource =
   | 'untracked:extra'
   | 'untracked:manual';
 
+export type UnlockCondition =
+  | { type: 'another_task'; taskKey: string }
+  | { type: 'level_reached'; level: number };
+
+export interface EvaluatedUnlockCondition {
+  condition: UnlockCondition;
+  met: boolean;
+  status: 'completed' | 'missed' | 'current' | 'upcoming';
+}
+
 export interface TaskRule {
   key: string;
   group: string;
@@ -30,6 +40,7 @@ export interface TaskRule {
   due: string | [string, string];
   availableFrom?: string;
   source: TaskSource;
+  unlockConditions?: UnlockCondition[];
 }
 export interface Rules {
   courseId: number;
@@ -94,13 +105,16 @@ export type TaskStatus = 'completed' | 'upcoming' | 'missed' | 'untracked';
 
 export interface TaskModel extends TaskRule {
   status: TaskStatus;
+  baseStatus?: TaskStatus;
+  baseIsCurrent?: boolean;
   /** unix ms (end of the last due day) */
   dueAt: number;
   dueStartAt: number;
   completedAt?: number;
   rarityPct?: number;
   lockStatus?: 'locked' | 'unlocked';
-  unlockConditions?: unknown[];
+  unlockConditions?: UnlockCondition[];
+  evaluatedConditions?: EvaluatedUnlockCondition[];
   isCurrent?: boolean;
 }
 
@@ -134,7 +148,7 @@ export interface DashboardModel {
   homeAssignment?: HomeAssignmentModel;
   tasks: TaskModel[];
   xp: { tracked: number; mandatory: number; maxReachable: number };
-  level: { level: number; currentXp: number; needed: number; remaining: number; percent: number; rarityPct?: number };
+  level: { level: number; currentXp: number; needed: number; remaining: number; percent: number; rarityPct?: number; maxReachableLevel?: number };
   points: { exam: number; imsc: number; midterm: number; bonus: number; carried: number };
   official: { gradeText: string | null; updatedAt: string | null } | null;
   gradeInfo?: { pointsCollectableOnTheExam: number; examPassThreshold: number; gradeThresholds: number[] };

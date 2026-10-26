@@ -128,14 +128,19 @@ export function TasksPage() {
   const renderTaskRow = (tItem: TaskModel) => {
     const isCompleted = tItem.status === 'completed';
     const isMissed = tItem.status === 'missed';
-    const isCurrent = !!tItem.isCurrent;
+    const isLocked = !isCompleted && !isMissed && tItem.lockStatus === 'locked';
+    const isCurrent = !!tItem.isCurrent && !isLocked;
     const info = getTaskInfo(tItem.key, tItem.group, lang);
+    const conditions = tItem.evaluatedConditions ?? [];
+    const showConditions = conditions.length > 0 && (isLocked || isMissed);
 
     // Status dot color
     const dotColor = isCompleted
       ? 'rgb(47, 158, 68)'
       : isMissed
       ? 'rgb(224, 49, 49)'
+      : isLocked
+      ? 'rgb(173, 181, 189)'
       : isCurrent
       ? 'rgb(28, 126, 214)'
       : 'rgb(173, 181, 189)';
@@ -145,65 +150,124 @@ export function TasksPage() {
       ? t('statusCompleted')
       : isMissed
       ? t('statusMissed')
+      : isLocked
+      ? t('statusLocked')
       : isCurrent
       ? t('statusCurrent')
       : t('statusUpcoming');
 
-    const dueLabel = tItem.dueAt > 0 ? `${t('due')}: ${formatDate(tItem.dueAt)} (${formatRelDays(tItem.dueAt)})` : null;
+    const metCount = conditions.filter((c) => c.met).length;
+    const dueLabel =
+      isLocked && conditions.length > 0
+        ? t('requirementsMet', { met: metCount, total: conditions.length })
+        : tItem.dueAt > 0
+        ? `${t('due')}: ${formatDate(tItem.dueAt)} (${formatRelDays(tItem.dueAt)})`
+        : null;
 
     // Rarity tier
     const rInfo = getRarityInfo(tItem.rarityPct, lang, 'common');
 
+    const conditionDotColor: Record<string, string> = {
+      completed: 'rgb(47, 158, 68)',
+      missed: 'rgb(224, 49, 49)',
+      current: 'rgb(28, 126, 214)',
+      upcoming: 'rgb(173, 181, 189)',
+    };
+
     return (
-      <div key={tItem.key} className="task-row-official">
-        {/* Left dot & title column */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: dotColor,
-              flexShrink: 0,
-            }}
-          />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+      <div
+        key={tItem.key}
+        className="task-row-official"
+        style={{
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          gap: '8px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', width: '100%' }}>
+          {/* Left dot & title column */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
             <span
-              className="task-row-title-text"
-              title={info.title}
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: dotColor,
+                flexShrink: 0,
+              }}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+              <span
+                className="task-row-title-text"
+                title={info.title}
+              >
+                {info.title}
+              </span>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: dotColor }}>
+                {statusLabel}
+                {dueLabel && ` · ${dueLabel}`}
+              </span>
+            </div>
+          </div>
+
+          {/* Right badges column */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            {!isLocked && tItem.rarityPct !== undefined && tItem.rarityPct > 0 && (
+              <span
+                className="task-rarity-pill"
+                style={{
+                  background: rInfo.bg,
+                  color: rInfo.color,
+                }}
+              >
+                {rInfo.label}
+              </span>
+            )}
+            <span
+              className="task-xp-pill-official"
+              style={{
+                color: isCompleted ? 'rgb(47, 158, 68)' : isLocked ? 'rgb(134, 142, 150)' : 'rgb(28, 126, 214)',
+                background: isCompleted ? 'rgb(235, 251, 238)' : isLocked ? 'rgb(233, 236, 239)' : 'rgb(231, 245, 255)',
+              }}
             >
-              {info.title}
-            </span>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: dotColor }}>
-              {statusLabel}
-              {dueLabel && ` · ${dueLabel}`}
+              +{tItem.xp} XP
             </span>
           </div>
         </div>
 
-        {/* Right badges column */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          {tItem.rarityPct !== undefined && (
-            <span
-              className="task-rarity-pill"
-              style={{
-                background: rInfo.bg,
-                color: rInfo.color,
-              }}
-            >
-              {rInfo.label}
-            </span>
-          )}
-          <span
-            className="task-xp-pill-official"
-            style={{
-              color: isCompleted ? 'rgb(47, 158, 68)' : 'rgb(28, 126, 214)',
-              background: isCompleted ? 'rgb(235, 251, 238)' : 'rgb(231, 245, 255)',
-            }}
-          >
-            +{tItem.xp} XP
-          </span>
-        </div>
+        {/* Unlock conditions checklist */}
+        {showConditions && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', paddingLeft: '18px' }}>
+            {conditions.map((c, idx) => {
+              const condText =
+                c.condition.type === 'level_reached'
+                  ? t('requirementLevel', { level: c.condition.level })
+                  : t('requirementTask', { title: getTaskInfo(c.condition.taskKey, '', lang).title });
+              return (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: conditionDotColor[c.status] ?? 'rgb(173, 181, 189)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '11.5px',
+                      color: c.met ? 'rgb(73, 80, 87)' : 'rgb(134, 142, 150)',
+                      textDecoration: c.met ? 'line-through' : undefined,
+                    }}
+                  >
+                    {condText}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   };
@@ -212,7 +276,13 @@ export function TasksPage() {
   const renderSubgroupedTasks = (tasksList: TaskModel[]) => {
     // If filtering by current only
     const filtered = showCurrentOnly
-      ? tasksList.filter((t) => t.isCurrent)
+      ? tasksList.filter(
+          (t) =>
+            t.isCurrent ||
+            (t.lockStatus === 'locked' &&
+              t.status !== 'missed' &&
+              t.evaluatedConditions?.some((c) => c.status === 'current'))
+        )
       : tasksList;
 
     // Collect subgroups in order of appearance
@@ -301,8 +371,9 @@ export function TasksPage() {
   const currentLvl = m.level.level ?? 1;
   const currentXp = m.level.currentXp ?? 0;
   const neededXp = m.level.needed ?? 16;
-  const maxLvl = m.levels?.length || 22;
-  const nextLvl = Math.min(maxLvl, currentLvl + 1);
+  const totalLvls = m.levels?.length || 22;
+  const maxLvl = m.level.maxReachableLevel ?? totalLvls;
+  const nextLvl = Math.min(totalLvls, currentLvl + 1);
   const pct = Math.max(0, Math.min(100, (currentXp / Math.max(1, neededXp)) * 100));
 
   return (

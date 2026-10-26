@@ -10,8 +10,8 @@ export const rules = rulesJson as unknown as Rules;
 
 export function computeDashboard(snap: MoodleSnapshot, now = Date.now(), r: Rules = rules): DashboardModel {
   const labs = computeLabs(snap, r, now);
-  const tasks = evaluateTasks(snap, r, labs, now);
-  const { xp, level, points } = computeStatsFromTasks(tasks, r.levels);
+  const rawTasks = evaluateTasks(snap, r, labs, now);
+  const { tasks, xp, level, points } = computeStatsFromTasks(rawTasks, r.levels);
 
   const dash = snap.assignments.find((a) => /\(Dashboard\)/i.test(a.name) && /Félévközi/i.test(a.name));
   const updated = dash?.feedbackText?.match(/Last updated:\s*(\S+)/)?.[1] ?? null;

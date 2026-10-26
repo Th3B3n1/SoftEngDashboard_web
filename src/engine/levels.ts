@@ -1,4 +1,4 @@
-import { GRADE_KEYS, type GradeKey, type Level, type Rules, type TaskModel } from './types';
+import { GRADE_KEYS, type EvaluatedUnlockCondition, type GradeKey, type Level, type Rules, type TaskModel } from './types';
 
 /** Total XP needed to *reach* level L (level 1 = 0). */
 export const cumXp = (levels: Level[], L: number) =>
@@ -35,11 +35,10 @@ const rewardSum = (levels: Level[], level: number, type: 'exam_point' | 'imsc_po
 export const examPointsAt = (levels: Level[], level: number, extra = 0) => rewardSum(levels, level, 'exam_point') + extra;
 export const imscPointsAt = (levels: Level[], level: number) => rewardSum(levels, level, 'imsc_point');
 
-/** Computes XP totals, level progress, and exam/IMSc/carryover points from evaluated tasks. */
+/** Resolves unlock conditions on tasks and computes XP totals, level progress, maxReachableLevel, and points. */
 export function computeStatsFromTasks(tasks: TaskModel[], levels: Level[]) {
   let tracked = 0;
   let mandatory = 0;
-  let maxReachable = 0;
 
   for (const t of tasks) {
     if (t.status === 'completed') {
@@ -48,17 +47,124 @@ export function computeStatsFromTasks(tasks: TaskModel[], levels: Level[]) {
         mandatory += t.xp;
       }
     }
-    if (t.status !== 'missed') {
-      maxReachable += t.xp;
-    }
   }
 
-  const level = levelProgress(levels, tracked);
+  const currentLevelProgress = levelProgress(levels, tracked);
+  const currentLevel = currentLevelProgress.level;
+
+  const taskByKey = new Map<string, TaskModel>();
+  for (const t of tasks) {
+    taskByKey.set(t.key, t);
+  }
+
+  const getBaseStatus = (t: TaskModel) => (t.status === 'completed' ? 'completed' : (t.baseStatus ?? t.status));
+  const getBaseIsCurrent = (t: TaskModel) => (t.status === 'completed' ? false : (t.baseIsCurrent ?? Boolean(t.isCurrent)));
+
+  const tasksWithConditions = tasks.filter((t) => t.unlockConditions && t.unlockConditions.length > 0);
+  let unreachableKeys = new Set<string>();
+
+  for (let iter = 0; iter <= tasksWithConditions.length; iter++) {
+    const tentativeMaxXp = tasks
+      .filter((t) => getBaseStatus(t) !== 'missed' && !unreachableKeys.has(t.key))
+      .reduce((sum, t) => sum + t.xp, 0);
+    const tentativeMaxLevel = levelForXp(levels, tentativeMaxXp);
+
+    const nextUnreachable = new Set(unreachableKeys);
+    for (const t of tasksWithConditions) {
+      const baseSt = getBaseStatus(t);
+      if (baseSt === 'completed' || baseSt === 'missed' || nextUnreachable.has(t.key)) continue;
+
+      const isBlockedByMissedCond = (t.unlockConditions ?? []).some((cond) => {
+        if (cond.type === 'level_reached') {
+          return currentLevel < cond.level && tentativeMaxLevel < cond.level;
+        }
+        const prereq = taskByKey.get(cond.taskKey);
+        if (!prereq) return false;
+        const prereqStatus = getBaseStatus(prereq);
+        return prereqStatus === 'missed' || nextUnreachable.has(cond.taskKey);
+      });
+
+      if (isBlockedByMissedCond) {
+        nextUnreachable.add(t.key);
+      }
+    }
+
+    if (nextUnreachable.size === unreachableKeys.size) break;
+    unreachableKeys = nextUnreachable;
+  }
+
+  const maxReachable = tasks
+    .filter((t) => getBaseStatus(t) !== 'missed' && !unreachableKeys.has(t.key))
+    .reduce((sum, t) => sum + t.xp, 0);
+  const maxReachableLevel = levelForXp(levels, maxReachable);
+
+  const resolvedTasks: TaskModel[] = tasks.map((t) => {
+    if (!t.unlockConditions || t.unlockConditions.length === 0) {
+      return t;
+    }
+
+    const baseStatus = getBaseStatus(t);
+    const baseIsCurrent = getBaseIsCurrent(t);
+
+    const evaluatedConditions: EvaluatedUnlockCondition[] = t.unlockConditions.map((cond) => {
+      if (cond.type === 'level_reached') {
+        const met = currentLevel >= cond.level;
+        const status = met ? 'completed' : maxReachableLevel < cond.level ? 'missed' : 'upcoming';
+        return { condition: cond, met, status };
+      }
+      const prereq = taskByKey.get(cond.taskKey);
+      const prereqBaseStatus = prereq ? getBaseStatus(prereq) : 'upcoming';
+      const prereqIsMissed = prereqBaseStatus === 'missed' || unreachableKeys.has(cond.taskKey);
+      const met = prereqBaseStatus === 'completed';
+      const status = met
+        ? 'completed'
+        : prereqIsMissed
+        ? 'missed'
+        : prereq && getBaseIsCurrent(prereq)
+        ? 'current'
+        : 'upcoming';
+      return { condition: cond, met, status };
+    });
+
+    const allMet = evaluatedConditions.every((c) => c.met);
+    const anyMissed = evaluatedConditions.some((c) => c.status === 'missed');
+    const lockStatus: 'unlocked' | 'locked' = allMet ? 'unlocked' : 'locked';
+
+    let status = baseStatus;
+    let isCurrent = baseIsCurrent;
+
+    if (baseStatus === 'completed') {
+      status = 'completed';
+      isCurrent = false;
+    } else if (anyMissed || baseStatus === 'missed') {
+      status = 'missed';
+      isCurrent = false;
+    } else if (lockStatus === 'locked') {
+      status = 'upcoming';
+      isCurrent = false;
+    }
+
+    return {
+      ...t,
+      baseStatus,
+      baseIsCurrent,
+      status,
+      isCurrent,
+      lockStatus,
+      evaluatedConditions,
+    };
+  });
+
+  const level = {
+    ...currentLevelProgress,
+    maxReachableLevel,
+  };
   const exam = examPointsAt(levels, level.level);
   const carried = examPointsAt(levels, levelProgress(levels, mandatory).level);
   const imsc = imscPointsAt(levels, level.level);
 
   return {
+    tasks: resolvedTasks,
     xp: { tracked, mandatory, maxReachable },
     level,
     points: { exam, imsc, midterm: carried, bonus: exam - carried, carried },
@@ -89,12 +195,24 @@ export interface ForecastRow {
 
 export function forecast(rules: Rules, level: number): ForecastRow[] {
   const total = rules.gradeInfo.pointsCollectableOnTheExam;
+  const neededByGrade = GRADE_KEYS.map((_, n) => (n === 0 ? null : examPointsNeeded(rules, level, n)));
   return GRADE_KEYS.map((key, n) => {
     if (n === 0) {
-      return { key, neededPoints: rules.gradeInfo.examPassThreshold, neededPct: Math.round((rules.gradeInfo.examPassThreshold / total) * 100), reachable: true };
+      return {
+        key,
+        neededPoints: rules.gradeInfo.examPassThreshold,
+        neededPct: Math.round((rules.gradeInfo.examPassThreshold / total) * 100),
+        reachable: true,
+      };
     }
-    const needed = examPointsNeeded(rules, level, n);
-    return { key, neededPoints: needed, neededPct: Math.round((needed / total) * 100), reachable: needed <= total };
+    const needed = neededByGrade[n]!;
+    const supersededByHigherGrade = GRADE_KEYS.some((_, idx) => idx > n && neededByGrade[idx] === needed);
+    return {
+      key,
+      neededPoints: needed,
+      neededPct: Math.round((needed / total) * 100),
+      reachable: !supersededByHigherGrade && needed <= total,
+    };
   });
 }
 

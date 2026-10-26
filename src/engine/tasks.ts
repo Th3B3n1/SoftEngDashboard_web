@@ -149,11 +149,12 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
           const phaseOpen = (!pStart || now >= pStart) && now <= pDue;
           isCurrent = phaseOpen && startReached && !overdue;
         } else {
-          isCurrent = startReached && !overdue;
+          const withinTwoWeeks = !dueStartAt || now >= dueStartAt - 14 * 86_400_000;
+          isCurrent = withinTwoWeeks && !overdue;
         }
       }
     }
 
-    return { ...r, status, dueAt, dueStartAt, completedAt, isCurrent };
+    return { ...r, status, baseStatus: status, baseIsCurrent: isCurrent, dueAt, dueStartAt, completedAt, isCurrent };
   });
 }

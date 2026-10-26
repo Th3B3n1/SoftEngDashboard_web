@@ -3,7 +3,8 @@
  "levels": [
   {
    "xpToLevelUp": 16,
-   "rewards": []
+   "rewards": [],
+   "rarityPct": 100
   },
   {
    "xpToLevelUp": 16,
@@ -12,7 +13,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 70
   },
   {
    "xpToLevelUp": 16,
@@ -21,7 +23,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 59
   },
   {
    "xpToLevelUp": 20,
@@ -30,7 +33,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 52
   },
   {
    "xpToLevelUp": 20,
@@ -39,7 +43,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 43
   },
   {
    "xpToLevelUp": 20,
@@ -48,7 +53,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 36
   },
   {
    "xpToLevelUp": 26,
@@ -57,7 +63,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 28
   },
   {
    "xpToLevelUp": 26,
@@ -66,7 +73,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 14
   },
   {
    "xpToLevelUp": 32,
@@ -75,7 +83,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 32,
@@ -84,7 +93,8 @@
      "type": "imsc_point",
      "amount": 1
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 34,
@@ -93,7 +103,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 34,
@@ -102,7 +113,8 @@
      "type": "imsc_point",
      "amount": 1
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 36,
@@ -111,20 +123,8 @@
      "type": "exam_point",
      "amount": 3
     }
-   ]
-  },
-  {
-   "xpToLevelUp": 36,
-   "rewards": [
-    {
-     "type": "exam_point",
-     "amount": 3
-    },
-    {
-     "type": "imsc_point",
-     "amount": 2
-    }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 36,
@@ -137,7 +137,22 @@
      "type": "imsc_point",
      "amount": 2
     }
-   ]
+   ],
+   "rarityPct": 0
+  },
+  {
+   "xpToLevelUp": 36,
+   "rewards": [
+    {
+     "type": "exam_point",
+     "amount": 3
+    },
+    {
+     "type": "imsc_point",
+     "amount": 2
+    }
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 50,
@@ -150,7 +165,8 @@
      "type": "imsc_point",
      "amount": 2
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 50,
@@ -163,7 +179,8 @@
      "type": "imsc_point",
      "amount": 2
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 50,
@@ -176,7 +193,8 @@
      "type": "imsc_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 50,
@@ -189,7 +207,8 @@
      "type": "imsc_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 50,
@@ -202,7 +221,8 @@
      "type": "imsc_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 50,
@@ -215,7 +235,8 @@
      "type": "imsc_point",
      "amount": 3
     }
-   ]
+   ],
+   "rarityPct": 0
   },
   {
    "xpToLevelUp": 0,
@@ -232,7 +253,8 @@
      "type": "proposed_grade",
      "grade": 5
     }
-   ]
+   ],
+   "rarityPct": 0
   }
  ],
  "gradeInfo": {
@@ -323,7 +345,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 54
   },
   {
    "key": "min2LabsExcellent",
@@ -336,7 +359,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 42
   },
   {
    "key": "min3LabsExcellent",
@@ -349,7 +373,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 22
   },
   {
    "key": "min4LabsExcellent",
@@ -362,7 +387,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min5LabsExcellent",
@@ -375,7 +401,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min6LabsExcellent",
@@ -388,7 +415,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min7LabsExcellent",
@@ -401,7 +429,8 @@
     "2026-09-16",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "lab1Excellent",
@@ -411,7 +440,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-09-16",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 29
   },
   {
    "key": "lab2Excellent",
@@ -421,7 +451,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-09-30",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 46
   },
   {
    "key": "lab3Excellent",
@@ -431,7 +462,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-10-14",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 43
   },
   {
    "key": "lab4Excellent",
@@ -441,7 +473,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-28",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min1DevProcessLabsExcellent",
@@ -454,7 +487,8 @@
     "2026-09-16",
     "2026-10-28"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 54
   },
   {
    "key": "min2DevProcessLabsExcellent",
@@ -467,7 +501,8 @@
     "2026-09-16",
     "2026-10-28"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 42
   },
   {
    "key": "min3DevProcessLabsExcellent",
@@ -480,7 +515,8 @@
     "2026-09-16",
     "2026-10-28"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 22
   },
   {
    "key": "min4DevProcessLabsExcellent",
@@ -493,7 +529,8 @@
     "2026-09-16",
     "2026-10-28"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "lab5Excellent",
@@ -503,7 +540,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-11",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "lab6Excellent",
@@ -513,7 +551,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-25",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "lab7Excellent",
@@ -523,7 +562,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-12-09",
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min1UmlLabsExcellent",
@@ -536,7 +576,8 @@
     "2026-11-11",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min2UmlLabsExcellent",
@@ -549,7 +590,8 @@
     "2026-11-11",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "min3UmlLabsExcellent",
@@ -562,7 +604,8 @@
     "2026-11-11",
     "2026-12-09"
    ],
-   "source": "labs"
+   "source": "labs",
+   "rarityPct": 0
   },
   {
    "key": "registerByDate",
@@ -572,7 +615,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-09",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 68
   },
   {
    "key": "startOnboardingBy",
@@ -582,7 +626,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-16",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 56
   },
   {
    "key": "completeOnboardingBy",
@@ -592,7 +637,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-16",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 55
   },
   {
    "key": "codingStartCodingBy",
@@ -602,7 +648,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-23",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "codingCompleteCodingBy",
@@ -612,7 +659,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-27",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "codingFunctionalCorrectnessAtLeast",
@@ -622,7 +670,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-03",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "codingSonarQubeCodingBugFree",
@@ -632,7 +681,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-03",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "codingUnitTestCoverageAtLeast",
@@ -642,7 +692,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-03",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "codingCompleteRefactorBy",
@@ -652,7 +703,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-10-30",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "codingSonarQubeRefactorBugFree",
@@ -662,7 +714,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-03",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "testingStartTestingBy",
@@ -672,7 +725,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-11-06",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "testingCompleteTestingBy",
@@ -682,7 +736,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-11-10",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "testingCorrectnessAndCompletenessAtLeast",
@@ -692,7 +747,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-11-17",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "reviewFunctionalCorrectnessAtLeast",
@@ -702,7 +758,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-12-01",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "reviewSonarQubeBugFreeAtTheStart",
@@ -712,7 +769,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-12-01",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "reviewSonarQubeBugFreeAtTheEnd",
@@ -722,7 +780,8 @@
    "type": "mandatory",
    "examOnly": false,
    "due": "2026-12-01",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "reviewFastReviewTurnaround",
@@ -732,7 +791,8 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-12-01",
-   "source": "untracked:homework"
+   "source": "untracked:homework",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz1",
@@ -742,7 +802,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-09-13",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 23
   },
   {
    "key": "recapQuiz2",
@@ -752,7 +813,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-09-20",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 41
   },
   {
    "key": "recapQuiz3",
@@ -762,7 +824,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-09-20",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 33
   },
   {
    "key": "recapQuiz4",
@@ -772,7 +835,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-09-27",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 37
   },
   {
    "key": "recapQuiz5",
@@ -782,7 +846,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-10-04",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 42
   },
   {
    "key": "recapQuiz6",
@@ -792,7 +857,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-10-04",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 37
   },
   {
    "key": "recapQuiz7",
@@ -802,7 +868,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-10-11",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 41
   },
   {
    "key": "recapQuiz8",
@@ -812,7 +879,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-10-18",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 48
   },
   {
    "key": "recapQuiz9",
@@ -822,7 +890,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-10-18",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 44
   },
   {
    "key": "recapQuiz10",
@@ -832,7 +901,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-10-25",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 37
   },
   {
    "key": "recapQuiz11",
@@ -842,7 +912,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-01",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 30
   },
   {
    "key": "recapQuiz12",
@@ -852,7 +923,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-01",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 24
   },
   {
    "key": "recapQuiz13",
@@ -862,7 +934,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-08",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz14",
@@ -872,7 +945,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-15",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz15",
@@ -882,7 +956,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-15",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz16",
@@ -892,7 +967,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-22",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz17",
@@ -902,7 +978,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-29",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz18",
@@ -912,7 +989,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-11-29",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz19",
@@ -922,7 +1000,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-12-06",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "recapQuiz20",
@@ -932,7 +1011,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-12-13",
-   "source": "recapQuiz"
+   "source": "recapQuiz",
+   "rarityPct": 0
   },
   {
    "key": "teachingCase",
@@ -945,7 +1025,22 @@
     "2026-10-30",
     "2026-12-09"
    ],
-   "source": "untracked:extra"
+   "source": "untracked:extra",
+   "unlockConditions": [
+    {
+     "type": "another_task",
+     "taskKey": "min3DevProcessLabsExcellent"
+    },
+    {
+     "type": "another_task",
+     "taskKey": "completeOnboardingBy"
+    },
+    {
+     "type": "level_reached",
+     "level": 6
+    }
+   ],
+   "rarityPct": 0
   },
   {
    "key": "lemonTree",
@@ -955,7 +1050,22 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-12-01",
-   "source": "untracked:extra"
+   "source": "untracked:extra",
+   "unlockConditions": [
+    {
+     "type": "another_task",
+     "taskKey": "lab2Excellent"
+    },
+    {
+     "type": "another_task",
+     "taskKey": "lab3Excellent"
+    },
+    {
+     "type": "another_task",
+     "taskKey": "min2UmlLabsExcellent"
+    }
+   ],
+   "rarityPct": 0
   },
   {
    "key": "testingWithLLM",
@@ -965,7 +1075,18 @@
    "type": "optional",
    "examOnly": false,
    "due": "2026-12-01",
-   "source": "untracked:extra"
+   "source": "untracked:extra",
+   "unlockConditions": [
+    {
+     "type": "another_task",
+     "taskKey": "lab4Excellent"
+    },
+    {
+     "type": "level_reached",
+     "level": 13
+    }
+   ],
+   "rarityPct": 0
   },
   {
    "key": "attendGuestLecture",
@@ -975,7 +1096,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-09-28",
-   "source": "untracked:manual"
+   "source": "untracked:manual",
+   "rarityPct": 50
   },
   {
    "key": "lectureQuiz3",
@@ -988,7 +1110,8 @@
     "2026-09-01",
     "2026-12-09"
    ],
-   "source": "lectureQuiz"
+   "source": "lectureQuiz",
+   "rarityPct": 54
   },
   {
    "key": "lectureQuiz6",
@@ -1001,7 +1124,8 @@
     "2026-09-01",
     "2026-12-09"
    ],
-   "source": "lectureQuiz"
+   "source": "lectureQuiz",
+   "rarityPct": 44
   },
   {
    "key": "lectureQuiz9",
@@ -1014,7 +1138,8 @@
     "2026-09-01",
     "2026-12-09"
    ],
-   "source": "lectureQuiz"
+   "source": "lectureQuiz",
+   "rarityPct": 0
   },
   {
    "key": "lectureQuiz12",
@@ -1027,7 +1152,8 @@
     "2026-09-01",
     "2026-12-09"
    ],
-   "source": "lectureQuiz"
+   "source": "lectureQuiz",
+   "rarityPct": 0
   },
   {
    "key": "lectureQuiz15",
@@ -1040,7 +1166,8 @@
     "2026-09-01",
     "2026-12-09"
    ],
-   "source": "lectureQuiz"
+   "source": "lectureQuiz",
+   "rarityPct": 0
   },
   {
    "key": "lectureQuiz18",
@@ -1053,7 +1180,8 @@
     "2026-09-01",
     "2026-12-09"
    ],
-   "source": "lectureQuiz"
+   "source": "lectureQuiz",
+   "rarityPct": 0
   }
  ]
 }
