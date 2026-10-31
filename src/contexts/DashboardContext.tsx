@@ -2,11 +2,17 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { computeDashboard, rules } from '../engine/engine';
 import { applyHfDataToModel } from '../engine/hfIntegration';
 import type { DashboardModel } from '../engine/types';
-import { clearToken, ensureProtectedToken, getToken } from '../moodle/auth';
+import { clearToken, getToken } from '../moodle/auth';
 import { MoodleError } from '../moodle/client';
 import { fetchSnapshot } from '../moodle/snapshot';
 import type { MoodleSnapshot } from '../moodle/types';
-import { clearHfToken, fetchHfStatus, type HfStatus } from '../moodle/hfClient';
+import {
+  clearHfToken,
+  fetchHfStatus,
+  readCachedHfStatus,
+  writeCachedHfStatus,
+  type HfStatus,
+} from '../moodle/hfClient';
 import { Loader2, AlertCircle, LogOut } from 'lucide-react';
 
 const CACHE_KEY = 'moodle.snapshot';
@@ -40,14 +46,7 @@ function readCache(): MoodleSnapshot | null {
 
 export function DashboardProvider({ children }: { children: ReactNode }) {
   const [snap, setSnap] = useState<MoodleSnapshot | null>(readCache);
-  const [hfStatus, setHfStatus] = useState<HfStatus | null>(() => {
-    try {
-      const raw = sessionStorage.getItem('hf.status');
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [hfStatus, setHfStatus] = useState<HfStatus | null>(readCachedHfStatus);
   const [refreshing, setRefreshing] = useState(false);
   const [progress, setProgress] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -55,11 +54,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const lastRefreshTime = useRef<number>(Date.now());
 
   const updateHfStatus = useCallback((newHf: HfStatus | null) => {
-    if (newHf) {
-      sessionStorage.setItem('hf.status', JSON.stringify(newHf));
-    } else {
-      sessionStorage.removeItem('hf.status');
-    }
+    writeCachedHfStatus(newHf);
     setHfStatus(newHf);
   }, []);
 
@@ -67,7 +62,6 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     clearToken();
     clearHfToken();
     sessionStorage.removeItem(CACHE_KEY);
-    sessionStorage.removeItem('hf.status');
     window.location.reload();
   }, []);
 
@@ -76,11 +70,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setRefreshing(true);
     setError(null);
     try {
-      const rawOrEncToken = getToken();
-      if (!rawOrEncToken) return;
-
-      // Upgrade any unencrypted token in localStorage to a server-encrypted token
-      const token = await ensureProtectedToken(rawOrEncToken);
+      const token = getToken();
+      if (!token) return;
 
       const hfPromise = fetchHfStatus().catch((err) => {
         console.warn('HF status sync warning:', err);
@@ -96,7 +87,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       setSnap(s);
 
       if (hf) {
-        sessionStorage.setItem('hf.status', JSON.stringify(hf));
+        writeCachedHfStatus(hf);
         setHfStatus(hf);
       }
     } catch (e) {
