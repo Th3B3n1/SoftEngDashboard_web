@@ -15,6 +15,7 @@ export type TaskSource =
   | 'labs'
   | 'recapQuiz'
   | 'lectureQuiz'
+  | 'cmid'
   | 'untracked:homework'
   | 'untracked:extra'
   | 'untracked:manual';
@@ -40,6 +41,7 @@ export interface TaskRule {
   due: string | [string, string];
   availableFrom?: string;
   source: TaskSource;
+  cmid?: number;
   unlockConditions?: UnlockCondition[];
 }
 export interface Rules {

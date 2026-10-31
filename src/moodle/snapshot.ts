@@ -31,6 +31,10 @@ interface BestGrade {
 interface Attempts {
   attempts: unknown[];
 }
+interface MobileContentRes {
+  templates?: { id: string; html: string }[];
+  otherdata?: Record<string, unknown>;
+}
 
 const stripHtml = (s: string) =>
   s
@@ -43,6 +47,33 @@ const stripHtml = (s: string) =>
 /** Assignments whose status the engine cares about (lab reports, retake reports, staff dashboard). */
 const RELEVANT_ASSIGN = /^LAB\d+:\s*jegyzőkönyv|^Pótlabor .*jegyzőkönyv|\(Dashboard\)/i;
 
+async function fetchAttendanceCompleted(
+  token: string,
+  courseId: number,
+  userid: number,
+  cmid: number,
+): Promise<boolean> {
+  const res = await callWs<MobileContentRes>(token, 'tool_mobile_get_content', {
+    component: 'mod_attendance',
+    method: 'mobile_view_activity',
+    args: [
+      { name: 'cmid', value: String(cmid) },
+      { name: 'courseid', value: String(courseId) },
+      { name: 'userid', value: String(userid) },
+    ],
+  }).catch(() => null);
+
+  if (!res) return false;
+  const html = stripHtml((res.templates ?? []).map((t) => t.html).join(' '));
+  const otherStr = JSON.stringify(res.otherdata ?? {});
+  return (
+    /[1-9]\d*\s*\/\s*[1-9]\d*/.test(html) ||
+    /100([.,]0+)?\s*%/.test(html) ||
+    /Jelen|Present|Teljesítve|Megfelelt/i.test(html) ||
+    /"(taken|points|percentage)"\s*:\s*[1-9]/.test(otherStr)
+  );
+}
+
 export async function fetchSnapshot(
   token: string,
   courseId: number,
@@ -53,12 +84,20 @@ export async function fetchSnapshot(
   const userid = info.userid;
 
   onProgress?.('Kurzusadatok letöltése…');
-  const [groups, quizzesRes, assignsRes, completion] = await Promise.all([
+  const [groups, quizzesRes, assignsRes, completion, attended226035] = await Promise.all([
     callWs<GroupsRes>(token, 'core_group_get_course_user_groups', { courseid: courseId, userid }),
     callWs<QuizzesRes>(token, 'mod_quiz_get_quizzes_by_courses', { courseids: [courseId] }),
     callWs<AssignsRes>(token, 'mod_assign_get_assignments', { courseids: [courseId] }),
     callWs<CompletionRes>(token, 'core_completion_get_activities_completion_status', { courseid: courseId, userid }),
+    fetchAttendanceCompleted(token, courseId, userid, 226035),
   ]);
+
+  if (attended226035 && !completion.statuses.some((s) => s.cmid === 226035 && (s.state === 1 || s.state === 2))) {
+    completion.statuses = [
+      ...completion.statuses.filter((s) => s.cmid !== 226035),
+      { cmid: 226035, state: 1, timecompleted: 0 },
+    ];
+  }
 
   const completionByCm = new Map(completion.statuses.map((s) => [s.cmid, s]));
   const quizzes = quizzesRes.quizzes;
@@ -115,6 +154,11 @@ export async function fetchSnapshot(
     groups: groups.groups.map((g) => g.name),
     quizzes: quizInfos,
     assignments: assignInfos,
+    completions: completion.statuses.map((s) => ({
+      cmid: s.cmid,
+      state: s.state,
+      timeCompleted: s.timecompleted || null,
+    })),
   };
 }
 

@@ -28,6 +28,12 @@ export interface AssignInfo {
   feedbackText: string | null;
 }
 
+export interface CompletionInfo {
+  cmid: number;
+  state: number;
+  timeCompleted: number | null;
+}
+
 export interface MoodleSnapshot {
   /** unix ms when this snapshot was taken */
   fetchedAt: number;
@@ -36,5 +42,6 @@ export interface MoodleSnapshot {
   groups: string[];
   quizzes: QuizInfo[];
   assignments: AssignInfo[];
+  completions?: CompletionInfo[];
 }
 

@@ -138,6 +138,18 @@ export function evaluateTasks(snap: MoodleSnapshot, rules: Rules, labs: LabsMode
         const startReached = !dueStartAt || now >= dueStartAt;
         isCurrent = startReached && !overdue;
       }
+    } else if (r.source === 'cmid' || r.cmid !== undefined) {
+      const comp = snap.completions?.find((c) => c.cmid === r.cmid);
+      if (comp && (comp.state === 1 || comp.state === 2)) {
+        status = 'completed';
+        if (comp.timeCompleted) completedAt = comp.timeCompleted * 1000;
+      } else {
+        status = overdue ? 'missed' : 'upcoming';
+        if (status === 'upcoming') {
+          const withinTwoWeeks = !dueStartAt || now >= dueStartAt - 14 * 86_400_000;
+          isCurrent = withinTwoWeeks && !overdue;
+        }
+      }
     } else if (r.source.startsWith('untracked:')) {
       status = overdue ? 'missed' : 'upcoming';
       if (status === 'upcoming') {

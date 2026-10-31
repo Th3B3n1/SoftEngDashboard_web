@@ -1096,7 +1096,8 @@
    "type": "optional",
    "examOnly": true,
    "due": "2026-09-28",
-   "source": "untracked:manual",
+   "source": "cmid",
+   "cmid": 226035,
    "rarityPct": 50
   },
   {
