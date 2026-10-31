@@ -1,5 +1,3 @@
-import { BACKEND_URL } from '../config';
-
 export const MOODLE_BASE = 'https://edu.vik.bme.hu';
 
 export class MoodleError extends Error {
@@ -28,16 +26,16 @@ function flatten(params: Record<string, Param>, out = new URLSearchParams(), pre
 }
 
 /**
- * Call a Moodle web-service function via the backend read-only Course 16995 proxy.
+ * Call a Moodle web-service function directly on Moodle's REST server.
  * Sent as application/x-www-form-urlencoded => a CORS "simple request" (no preflight).
  */
 export async function callWs<T>(token: string, fn: string, params: Record<string, Param> = {}): Promise<T> {
   const body = flatten({ wstoken: token, wsfunction: fn, moodlewsrestformat: 'json', ...params });
   let res: Response;
   try {
-    res = await fetch(`${BACKEND_URL}/api/moodle/ws`, { method: 'POST', body });
+    res = await fetch(`${MOODLE_BASE}/webservice/rest/server.php`, { method: 'POST', body });
   } catch {
-    throw new MoodleError('A szerver / Moodle nem érhető el (hálózati hiba).', 'network');
+    throw new MoodleError('A Moodle szerver nem érhető el (hálózati hiba).', 'network');
   }
   const json = await res.json().catch(() => null);
   if (json && typeof json === 'object' && 'exception' in json) {

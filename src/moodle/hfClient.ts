@@ -1,6 +1,6 @@
-import { BACKEND_URL } from '../config';
-
 const LTIK_KEY = 'softeng.ltik';
+const HF_STATUS_KEY = 'hf.status';
+export const HF_PORTAL_BASE = 'https://softeng-hw.ftsrg.org';
 
 export interface HfTaskInstance {
   type: string;
@@ -66,6 +66,28 @@ export function setHfToken(token: string): void {
 
 export function clearHfToken(): void {
   localStorage.removeItem(LTIK_KEY);
+  localStorage.removeItem(HF_STATUS_KEY);
+  sessionStorage.removeItem(HF_STATUS_KEY);
+}
+
+export function readCachedHfStatus(): HfStatus | null {
+  try {
+    const raw = sessionStorage.getItem(HF_STATUS_KEY) || localStorage.getItem(HF_STATUS_KEY);
+    return raw ? (JSON.parse(raw) as HfStatus) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function writeCachedHfStatus(status: HfStatus | null): void {
+  if (status) {
+    const str = JSON.stringify(status);
+    sessionStorage.setItem(HF_STATUS_KEY, str);
+    localStorage.setItem(HF_STATUS_KEY, str);
+  } else {
+    sessionStorage.removeItem(HF_STATUS_KEY);
+    localStorage.removeItem(HF_STATUS_KEY);
+  }
 }
 
 export function parseHfData(data: any): HfStatus {
@@ -88,7 +110,7 @@ export function parseHfData(data: any): HfStatus {
 export function parseHfJson(raw: string): HfStatus | null {
   try {
     const data = JSON.parse(raw);
-    if (typeof data === 'object' && data !== null) {
+    if (typeof data === 'object' && data !== null && ('phaseInstances' in data || 'registrationCompletionDate' in data || 'status' in data)) {
       return parseHfData(data);
     }
   } catch {
@@ -97,21 +119,60 @@ export function parseHfJson(raw: string): HfStatus | null {
   return null;
 }
 
-export async function fetchHfStatus(ltik?: string): Promise<HfStatus | null> {
-  const token = ltik ? extractLtik(ltik) : getHfToken();
+async function fetchJsonWithCheck(url: string, headers?: Record<string, string>): Promise<any | null> {
+  const res = await fetch(url, headers ? { headers } : undefined);
+  if (!res.ok) return null;
+  const ct = res.headers.get('content-type') || '';
+  if (!ct.includes('application/json')) return null;
+  return await res.json();
+}
 
-  if (token) {
+async function tryFetchFromBase(baseUrl: string, cleanLtik: string, useBearer: boolean): Promise<HfStatus | null> {
+  const escapedLtik = encodeURIComponent(cleanLtik);
+  const headers = useBearer ? { Authorization: `Bearer ${cleanLtik}` } : undefined;
+
+  const authJson = await fetchJsonWithCheck(`${baseUrl}/api/auth?ltik=${escapedLtik}`, headers);
+  const instId = authJson?.courseInstanceIds?.[0];
+  if (!instId || typeof instId !== 'string') return null;
+
+  const escapedInstId = encodeURIComponent(instId);
+  let instData = await fetchJsonWithCheck(
+    `${baseUrl}/api/course-instances/softeng/${escapedInstId}?ltik=${escapedLtik}`,
+    headers,
+  );
+  if (!instData) {
+    instData = await fetchJsonWithCheck(
+      `${baseUrl}/api/courses/softeng/${escapedInstId}?ltik=${escapedLtik}`,
+      headers,
+    );
+  }
+  if (!instData) return null;
+
+  return parseHfData(instData);
+}
+
+export async function fetchHfStatus(ltik?: string): Promise<HfStatus | null> {
+  const rawInput = ltik ?? getHfToken();
+  if (!rawInput) return null;
+
+  const directJson = parseHfJson(rawInput);
+  if (directJson) return directJson;
+
+  const token = extractLtik(rawInput);
+  if (!token) return null;
+
+  const attempts: Array<() => Promise<HfStatus | null>> = [
+    () => tryFetchFromBase('/hf-api', token, true),
+    () => tryFetchFromBase(HF_PORTAL_BASE, token, false),
+    () => tryFetchFromBase(HF_PORTAL_BASE, token, true),
+  ];
+
+  for (const attempt of attempts) {
     try {
-      // Route through backend which handles Cloudflare & CORS
-      const proxyUrl = `${BACKEND_URL}/api/hf/status?ltik=${encodeURIComponent(token)}`;
-      const res = await fetch(proxyUrl);
-      if (res.ok) {
-        const data = await res.json();
-        return parseHfData(data);
-      }
-      console.warn(`HF proxy returned status ${res.status}`);
-    } catch (err) {
-      console.warn('Failed to fetch HF status via proxy:', err);
+      const result = await attempt();
+      if (result) return result;
+    } catch {
+      // try next strategy
     }
   }
 
