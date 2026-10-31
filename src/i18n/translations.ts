@@ -26,7 +26,7 @@ export const translations = {
     tabDirect: 'Direkt belépés',
     tabManual: 'Kézi token',
     vpnWarningTitle: 'Fontos tudnivaló a házi feladat szinkronizációhoz:',
-    vpnWarningBody: 'Mivel a Házi Feladat Portál elérése az egyetemi hálózatra van korlátozva, ezért az azokhoz tartozó XP-k nem tundnak itt szinkronizálódni. Ezt egyelőre nem tudjuk megoldani, így ez a frontend csak a Moodle adatok alapján számol.',
+    vpnWarningBody: 'A HF Portálhoz való hozzáférés csak az egyetemi intranetről lehetséges. A házi feladat pontok automatikus szinkronizálásához a belépés előtt csatlakozz a BME VPN-hez vagy a campus Eduroam hálózatához!',
     usernameLabel: 'eduID',
     passwordLabel: 'Jelszó',
     loginBtn: 'Bejelentkezés',
