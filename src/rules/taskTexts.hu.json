@@ -131,7 +131,7 @@
  },
  "codingFunctionalCorrectnessAtLeast": {
   "title": "Funkcionális helyesség küszöb elérése",
-  "description": "Érj el legalább 95%-os funkcionális helyességi pontszámot.",
+  "description": "Érj el legalább 95%-os funkcionális helyességi pontszámot a kódolás feladat teljesítésének pillanatában.",
   "group": "Kódolás"
  },
  "codingSonarQubeCodingBugFree": {
@@ -141,7 +141,7 @@
  },
  "codingUnitTestCoverageAtLeast": {
   "title": "Unit teszt lefedettségi küszöb elérése",
-  "description": "Érd el a minimális unit teszt lefedettséget a SonarQube ellenőrzés során a kódolás feladat teljesítésének pillanatában.",
+  "description": "Érd el a minimális unit teszt lefedettséget a SonarQube ellenőrzés során a kódolás vagy a refaktorálás feladat teljesítésének pillanatában.",
   "group": "Kódolás"
  },
  "codingCompleteRefactorBy": {
@@ -156,22 +156,32 @@
  },
  "testingCompleteTestingBy": {
   "title": "Tesztelés korai teljesítése",
-  "description": "Fejezd be a tesztelési feladatot az első héten belül.",
+  "description": "Kérj kiértékelést a teszttervezés feladatra a határidő napján délig, és a kiértékelés legyen sikeres.",
   "group": "Tesztelés"
  },
  "testingStartTestingBy": {
   "title": "Tesztelés korai elkezdése",
-  "description": "Kezdd el a tesztelési feladatot az első 72 órában.",
+  "description": "Kérj kiértékelést az első 72 órában, amely végül legalább 25%-os teljességi pontszámot teljesít.",
   "group": "Tesztelés"
  },
  "testingCorrectnessAndCompletenessAtLeast": {
   "title": "Tesztelési helyességi küszöb elérése",
-  "description": "Érj el legalább 75%-os helyességi és teljességi pontszámot a tesztelési feladatban.",
+  "description": "Érj el legalább 90%-os teljességi pontszámot a tesztelési feladatban.",
   "group": "Tesztelés"
  },
  "reviewFunctionalCorrectnessAtLeast": {
   "title": "Funkcionális helyesség küszöb elérése",
-  "description": "Érj el 100%-os funkcionális helyességi pontszámot.",
+  "description": "Érj el 95%-os funkcionális helyességi pontszámot a review feladat teljesítésének pillanatában.",
+  "group": "Review"
+ },
+ "reviewFunctionalCorrectnessMax": {
+  "title": "Minden apróság működik",
+  "description": "Érj el 100%-os funkcionális helyességi pontszámot a review feladat teljesítésének pillanatában.",
+  "group": "Review"
+ },
+ "reviewCorrectnessAndCompletenessAtLeast": {
+  "title": "Tesztelési helyességi küszöb elérése",
+  "description": "Érj el legalább 90%-os teljességi pontszámot a review feladat teljesítésének pillanatában.",
   "group": "Review"
  },
  "reviewSonarQubeBugFreeAtTheStart": {

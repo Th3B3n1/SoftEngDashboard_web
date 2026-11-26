@@ -170,23 +170,33 @@
     "group": "Testing"
   },
   "reviewFunctionalCorrectnessAtLeast": {
-    "title": "Functional correctness (review)",
-    "description": "Maintain functional correctness during code review.",
+    "title": "Meet the functional correctness bar",
+    "description": "Reach a functional correctness score of 95% when you complete the review task.",
+    "group": "Review"
+  },
+  "reviewFunctionalCorrectnessMax": {
+    "title": "Everything works perfectly",
+    "description": "Reach a functional correctness score of 100% when you complete the review task.",
+    "group": "Review"
+  },
+  "reviewCorrectnessAndCompletenessAtLeast": {
+    "title": "Meet the testing correctness bar",
+    "description": "Reach a completeness score of at least 90% when your submission for the review task is accepted.",
     "group": "Review"
   },
   "reviewSonarQubeBugFreeAtTheStart": {
-    "title": "Bug-free code at review start",
-    "description": "Code submitted for review passes SonarQube checks.",
+    "title": "Bug-free SonarQube scan (review start)",
+    "description": "Start the review with a bug-free SonarQube scan.",
     "group": "Review"
   },
   "reviewSonarQubeBugFreeAtTheEnd": {
-    "title": "Bug-free code at review end",
-    "description": "Final code after review passes SonarQube checks.",
+    "title": "Bug-free SonarQube scan (review end)",
+    "description": "End the review with a bug-free SonarQube scan.",
     "group": "Review"
   },
   "reviewFastReviewTurnaround": {
     "title": "Fast review turnaround",
-    "description": "Complete peer code reviews quickly within required timeframe.",
+    "description": "Always complete your task during the review phase within 24 hours.",
     "group": "Review"
   },
   "recapQuiz1": {
